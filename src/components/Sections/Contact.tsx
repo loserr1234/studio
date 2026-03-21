@@ -50,7 +50,7 @@ export const Contact = () => {
 
         <div className="flex-1 flex flex-col items-center justify-center gap-4">
           <a
-            href="mailto:thoughts.09@proton.me"
+            href="/contact"
             className="contact-cta-btn group relative inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-accent text-black text-sm md:text-base font-semibold tracking-wide uppercase overflow-hidden hover:scale-110 hover:shadow-[0_0_40px_rgba(229,192,123,0.4)] active:scale-[0.97] transition-all duration-300 w-fit"
             style={{ opacity: 0 }}
           >
