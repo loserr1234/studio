@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
-const primaryLinks = ["Solutions", "Work", "About", "Contact"];
+const primaryLinks = ["Services", "Projects", "About", "Contact"];
 const secondaryLinks = [
   { label: "Services",     href: "/services" },
   { label: "About Us",     href: "#about"    },
@@ -60,9 +60,7 @@ export const Navbar = () => {
     ? { duration: 0.25 }
     : { duration: 0.8, ease: EASE_CURTAIN };
 
-  const exitTransition = prefersReduced
-    ? { duration: 0.2 }
-    : { duration: 0.55, ease: EASE_CURTAIN };
+
 
   return (
     <>
@@ -79,10 +77,10 @@ export const Navbar = () => {
       <header className="absolute top-0 inset-x-0 z-40">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-end">
           <nav className="hidden md:flex items-center gap-8" aria-label="Top navigation">
-            {["Solutions", "Work", "About"].map((item) => (
+            {["Services", "Projects", "About"].map((item) => (
               <a
                 key={item}
-                href={item === "Solutions" ? "/services" : item === "Work" ? "/projects" : `#${item.toLowerCase()}`}
+                href={item === "Services" ? "/services" : item === "Projects" ? "/projects" : `#${item.toLowerCase()}`}
                 className="text-xs uppercase tracking-widest font-medium text-muted hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
                 style={{ transition: 'color 0.3s ease' }}
               >
@@ -209,7 +207,7 @@ export const Navbar = () => {
                   >
                     <a
                       ref={i === 0 ? firstLinkRef : undefined}
-                      href={item === "Solutions" ? "/services" : item === "Work" ? "/projects" : item === "Contact" ? "/contact" : `#${item.toLowerCase()}`}
+                      href={item === "Services" ? "/services" : item === "Projects" ? "/projects" : item === "Contact" ? "/contact" : `#${item.toLowerCase()}`}
                       onClick={() => setMenuOpen(false)}
                       className="hover:text-accent focus-visible:text-accent focus-visible:outline-none"
                       style={{ transition: 'color 0.25s ease' }}
