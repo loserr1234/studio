@@ -2,11 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 const primaryLinks = ["Services", "Projects", "About", "Contact"];
-const secondaryLinks = [
-  { label: "Services",     href: "/services" },
-  { label: "About Us",     href: "#about"    },
-  { label: "Get in Touch", href: "/contact"  },
-];
+
 
 /* ── Easing curves ── */
 const EASE_OUT_EXPO  = [0.16, 1, 0.3, 1]   as const;
@@ -202,37 +198,7 @@ export const Navbar = () => {
                 ))}
               </nav>
 
-              {/* ── Divider ── */}
-              <motion.div
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ delay: 0.65, duration: 0.6, ease: EASE_OUT_EXPO }}
-                className="h-px bg-white/10 mt-10 mb-8 origin-left"
-              />
-
-              {/* ── Secondary links ── */}
-              <motion.div
-                initial={{ opacity: 0, x: -12 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.72, duration: 0.5, ease: EASE_OUT_EXPO }}
-                className="flex flex-col gap-4"
-              >
-                {secondaryLinks.map(({ label, href }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    onClick={() => setMenuOpen(false)}
-                    className="text-white/30 hover:text-white text-sm tracking-wide focus-visible:outline-none focus-visible:text-accent w-fit"
-                    style={{
-                      borderBottom: '1px solid rgba(255,255,255,0.12)',
-                      paddingBottom: '2px',
-                      transition: 'color 0.25s ease',
-                    }}
-                  >
-                    {label}
-                  </a>
-                ))}
-              </motion.div>
+              {/* Primary nav links removed divider and secondary section as requested */}
             </motion.div>
           </>
         )}

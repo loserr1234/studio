@@ -7,8 +7,8 @@ import { animateWords } from '../../utils/gsapText';
 gsap.registerPlugin(ScrollTrigger);
 
 const stats = [
-  { value: '50+', label: 'Projects Delivered' },
-  { value: '3', label: 'Years of Craft' },
+  { value: '4+', label: 'Projects Created' },
+  { value: '2+', label: 'year of hands on experience' },
   { value: '100%', label: 'Dedication' },
 ];
 
@@ -28,8 +28,8 @@ export const About = () => {
     const ctx = gsap.context(() => {
       // Animate stat numbers counting up
       const statData = [
-        { target: 50, suffix: '+' },
-        { target: 3,  suffix: '' },
+        { target: 4, suffix: '+' },
+        { target: 2,  suffix: '+' },
         { target: 100, suffix: '%' },
       ];
 

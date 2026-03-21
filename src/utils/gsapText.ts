@@ -16,7 +16,7 @@ export function animateChars(
     .map(ch =>
       ch === ' '
         ? '<span style="display:inline-block;min-width:0.28em"> </span>'
-        : `<span class="g-ch-wrap" style="display:inline-block;overflow:hidden;"><span class="g-ch" style="display:inline-block;">${ch}</span></span>`
+        : `<span class="g-ch-wrap" style="display:inline-block;"><span class="g-ch" style="display:inline-block;">${ch}</span></span>`
     )
     .join('');
   const chars = Array.from(el.querySelectorAll<HTMLElement>('.g-ch'));
@@ -101,7 +101,7 @@ export function animateWords(
     .split(/\s+/)
     .map(
       w =>
-        `<span class="g-wd-wrap" style="display:inline-block;overflow:hidden;margin-right:0.28em"><span class="g-wd" style="display:inline-block;">${w}</span></span>`
+        `<span class="g-wd-wrap" style="display:inline-block;margin-right:0.28em"><span class="g-wd" style="display:inline-block;">${w}</span></span>`
     )
     .join('');
   const words = Array.from(el.querySelectorAll<HTMLElement>('.g-wd'));
