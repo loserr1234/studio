@@ -43,22 +43,14 @@ export const Navbar = () => {
     if (menuOpen) setTimeout(() => firstLinkRef.current?.focus(), 650);
   }, [menuOpen]);
 
-  /* ── overlay animation variants ── */
-  const overlayVariants = prefersReduced
-    ? {
-        hidden:  { opacity: 0 },
-        visible: { opacity: 1 },
-        exit:    { opacity: 0 },
-      }
-    : {
-        hidden:  { clipPath: 'inset(0 0 100% 0)' },
-        visible: { clipPath: 'inset(0 0 0% 0)'   },
-        exit:    { clipPath: 'inset(0 0 100% 0)'  },
-      };
+  /* ── panel slide-in from left ── */
+  const panelVariants = prefersReduced
+    ? { hidden: { opacity: 0 }, visible: { opacity: 1 }, exit: { opacity: 0 } }
+    : { hidden: { x: '-100%' }, visible: { x: '0%' }, exit: { x: '-100%' } };
 
-  const overlayTransition = prefersReduced
+  const panelTransition = prefersReduced
     ? { duration: 0.25 }
-    : { duration: 0.8, ease: EASE_CURTAIN };
+    : { duration: 0.65, ease: EASE_CURTAIN };
 
 
 
@@ -137,124 +129,112 @@ export const Navbar = () => {
         )}
       </AnimatePresence>
 
-      {/* ── Full-screen overlay menu ── */}
+      {/* ── Half-screen left panel menu ── */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
-            id="main-overlay-menu"
-            key="overlay"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Navigation menu"
-            variants={overlayVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            transition={overlayTransition}
-            style={prefersReduced ? {} : { willChange: 'clip-path' }}
-            className="fixed inset-0 z-[65] bg-[#060606] flex flex-col px-8 md:px-14 lg:px-20 pt-28 pb-12 overflow-auto"
-          >
-            {/* Subtle grain overlay */}
-            <div
+          <>
+            {/* Click-outside backdrop */}
+            <motion.div
+              key="backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="fixed inset-0 z-[64] bg-black/50 backdrop-blur-sm"
+              onClick={() => setMenuOpen(false)}
               aria-hidden="true"
-              className="absolute inset-0 pointer-events-none opacity-[0.03]"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`,
-                backgroundSize: '160px 160px',
-              }}
             />
 
-            {/* Ghost "MENU" background watermark */}
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 flex items-end justify-end px-8 md:px-14 pb-8 pointer-events-none select-none overflow-hidden"
+            {/* Left panel */}
+            <motion.div
+              id="main-overlay-menu"
+              key="panel"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Navigation menu"
+              variants={panelVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              transition={panelTransition}
+              style={prefersReduced ? {} : { willChange: 'transform' }}
+              className="fixed top-0 left-0 h-full w-4/5 max-w-sm md:w-1/2 md:max-w-md z-[65] bg-[#060606] flex flex-col px-8 md:px-12 pt-24 pb-12 overflow-auto border-r border-white/[0.06]"
             >
-              <span
-                className="text-[18vw] font-bold leading-none tracking-tighter text-white/[0.025]"
-                style={{ fontFamily: "'Playfair Display', serif" }}
+              {/* Subtle grain */}
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 pointer-events-none opacity-[0.03]"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`,
+                  backgroundSize: '160px 160px',
+                }}
+              />
+
+              {/* ── MENU label ── */}
+              <motion.p
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3, duration: 0.5, ease: EASE_OUT_EXPO }}
+                className="text-white/25 text-[9px] tracking-[0.55em] uppercase mb-10 font-light"
               >
                 Menu
-              </span>
-            </div>
+              </motion.p>
 
-            {/* ── MENU label ── */}
-            <motion.p
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.38, duration: 0.55, ease: EASE_OUT_EXPO }}
-              className="text-white/25 text-[9px] tracking-[0.55em] uppercase mb-10 font-light"
-            >
-              Menu
-            </motion.p>
-
-            {/* ── Big editorial nav — each link staggers in ── */}
-            <nav aria-label="Main navigation">
-              <p
-                className="text-[2.5rem] md:text-[3.5rem] lg:text-7xl font-bold tracking-tighter leading-[1.25]"
-                style={{ fontFamily: "'Playfair Display', serif" }}
-              >
+              {/* ── Primary nav links ── */}
+              <nav aria-label="Main navigation" className="flex flex-col gap-1">
                 {primaryLinks.map((item, i) => (
-                  <motion.span
+                  <motion.div
                     key={item}
-                    className="inline"
-                    initial={{ opacity: 0, y: 28 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      delay: 0.42 + i * 0.08,
-                      duration: 0.6,
-                      ease: EASE_OUT_EXPO,
-                    }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.32 + i * 0.07, duration: 0.55, ease: EASE_OUT_EXPO }}
                   >
                     <a
                       ref={i === 0 ? firstLinkRef : undefined}
                       href={item === "Services" ? "/services" : item === "Projects" ? "/projects" : item === "Contact" ? "/contact" : `#${item.toLowerCase()}`}
                       onClick={() => setMenuOpen(false)}
-                      className="hover:text-accent focus-visible:text-accent focus-visible:outline-none"
-                      style={{ transition: 'color 0.25s ease' }}
+                      className="block text-4xl md:text-5xl font-bold tracking-tighter text-white/80 hover:text-accent focus-visible:text-accent focus-visible:outline-none leading-tight py-1"
+                      style={{ fontFamily: "'Playfair Display', serif", transition: 'color 0.25s ease' }}
                     >
                       {item}
                     </a>
-                    {i < primaryLinks.length - 1
-                      ? <span className="text-white/20">, </span>
-                      : <span className="text-accent">.</span>
-                    }
-                  </motion.span>
+                  </motion.div>
                 ))}
-              </p>
-            </nav>
+              </nav>
 
-            {/* ── Divider — wipes in ── */}
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ delay: 0.78, duration: 0.7, ease: EASE_OUT_EXPO }}
-              className="h-px bg-white/10 mt-12 mb-8 origin-left"
-            />
+              {/* ── Divider ── */}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.65, duration: 0.6, ease: EASE_OUT_EXPO }}
+                className="h-px bg-white/10 mt-10 mb-8 origin-left"
+              />
 
-            {/* ── Secondary links ── */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.88, duration: 0.5, ease: EASE_OUT_EXPO }}
-              className="flex flex-wrap gap-8"
-            >
-              {secondaryLinks.map(({ label, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  onClick={() => setMenuOpen(false)}
-                  className="text-white/30 hover:text-white text-sm tracking-wide focus-visible:outline-none focus-visible:text-accent"
-                  style={{
-                    borderBottom: '1px solid rgba(255,255,255,0.12)',
-                    paddingBottom: '2px',
-                    transition: 'color 0.25s ease',
-                  }}
-                >
-                  {label}
-                </a>
-              ))}
+              {/* ── Secondary links ── */}
+              <motion.div
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.72, duration: 0.5, ease: EASE_OUT_EXPO }}
+                className="flex flex-col gap-4"
+              >
+                {secondaryLinks.map(({ label, href }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    onClick={() => setMenuOpen(false)}
+                    className="text-white/30 hover:text-white text-sm tracking-wide focus-visible:outline-none focus-visible:text-accent w-fit"
+                    style={{
+                      borderBottom: '1px solid rgba(255,255,255,0.12)',
+                      paddingBottom: '2px',
+                      transition: 'color 0.25s ease',
+                    }}
+                  >
+                    {label}
+                  </a>
+                ))}
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
