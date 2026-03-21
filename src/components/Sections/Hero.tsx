@@ -4,7 +4,7 @@ import { Points, PointMaterial } from '@react-three/drei';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { animateScramble, animateWords } from '../../utils/gsapText';
+import { animateWords } from '../../utils/gsapText';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -50,8 +50,46 @@ export const Hero = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // ── Screen 1: "Studio." scramble reveal ──
-      animateScramble(logoRef.current, { delay: 0.3, cyclesPerChar: 16, speed: 0.036 });
+      // ── Screen 1: "Studio." — per-character curtain drop (top → bottom clip reveal) ──
+      const logoEl = logoRef.current;
+      if (logoEl) {
+        logoEl.setAttribute('aria-label', 'Studio.');
+        logoEl.innerHTML = 'Studio.'
+          .split('')
+          .map(ch => `<span class="logo-ch" data-ch="${ch}" style="display:inline-block;">${ch}</span>`)
+          .join('');
+
+        const spans = Array.from(logoEl.querySelectorAll<HTMLElement>('.logo-ch'));
+        const period = spans[spans.length - 1];
+
+        // Period is gold from the start
+        gsap.set(period, { color: '#E5C07B' });
+
+        // All chars start clipped (hidden above, revealed top-to-bottom)
+        gsap.set(spans, { clipPath: 'inset(0 0 105% 0)', y: -6 });
+
+        // Cascade: each letter drops its curtain in sequence
+        gsap.to(spans, {
+          clipPath: 'inset(0 0 0% 0)',
+          y: 0,
+          duration: 1.05,
+          ease: 'expo.out',
+          stagger: 0.055,
+          delay: 0.35,
+        });
+
+        // Period: single soft gold glow exhale after it fully settles
+        const periodDelay = 0.35 + (spans.length - 1) * 0.055 + 0.75;
+        gsap.fromTo(period,
+          { textShadow: '0 0 0px rgba(229,192,123,0)' },
+          {
+            textShadow: '0 0 28px rgba(229,192,123,0.6)',
+            duration: 0.7, ease: 'sine.inOut',
+            yoyo: true, repeat: 1,
+            delay: periodDelay,
+          }
+        );
+      }
 
       // ── Particle parallax scrub ──
       gsap.to(particles1Ref.current, {
