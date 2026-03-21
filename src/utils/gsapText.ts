@@ -39,6 +39,55 @@ export function animateChars(
   gsap.fromTo(chars, { y: '110%', opacity: 0, rotateX: -30 }, animProps);
 }
 
+/** Scramble each character through random glyphs before landing on the real letter */
+export function animateScramble(
+  el: HTMLElement | null,
+  opts: { delay?: number; cyclesPerChar?: number; speed?: number } = {}
+) {
+  if (!el) return;
+  const original = el.textContent || '';
+  el.setAttribute('aria-label', original);
+
+  const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&?!';
+  const delay       = opts.delay ?? 0;
+  const cyclesBase  = opts.cyclesPerChar ?? 14;
+  const speed       = opts.speed ?? 0.038; // seconds between glyph swaps
+
+  el.innerHTML = original
+    .split('')
+    .map(ch =>
+      ch === ' '
+        ? '<span style="display:inline-block;min-width:0.28em"> </span>'
+        : `<span class="s-ch" data-final="${ch}" style="display:inline-block;opacity:0">${ch}</span>`
+    )
+    .join('');
+
+  const spans = Array.from(el.querySelectorAll<HTMLElement>('.s-ch'));
+
+  spans.forEach((span, i) => {
+    const finalChar = span.dataset.final!;
+    const cycles    = cyclesBase + Math.floor(Math.random() * 6);
+    const startAt   = delay + i * 0.055;
+
+    gsap.delayedCall(startAt, () => {
+      gsap.set(span, { opacity: 1 });
+      let count = 0;
+      const tick = () => {
+        if (count < cycles) {
+          span.textContent = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+          count++;
+          gsap.delayedCall(speed, tick);
+        } else {
+          span.textContent = finalChar;
+          // snap the period to gold
+          if (finalChar === '.') span.style.color = '#E5C07B';
+        }
+      };
+      tick();
+    });
+  });
+}
+
 /** Split element's text into word spans and animate them in */
 export function animateWords(
   el: HTMLElement | null,
