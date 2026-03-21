@@ -64,7 +64,6 @@ function App() {
       smoothWheel: true,
       wheelMultiplier: 1,
       touchMultiplier: 2,
-      autoRaf: false, // disable Lenis's own RAF — GSAP ticker drives it exclusively
     });
     setLenis(lenis);
 
