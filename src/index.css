@@ -30,6 +30,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/*
+ * Safari ProMotion (120Hz) unlock.
+ * Safari only enables high refresh rate when a CSS animation is active.
+ * Animating a custom property costs zero paint/layout — purely invisible —
+ * but keeps Safari's rendering scheduler in high-fps mode continuously.
+ */
+@property --hz {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+@keyframes safari-promote {
+  from { --hz: 0; }
+  to   { --hz: 1; }
+}
+:root {
+  animation: safari-promote 1s linear infinite;
+}
+
 /* Custom Cursor styling hide default */
 @media (hover: hover) and (pointer: fine) {
   body {
