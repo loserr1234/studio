@@ -24,8 +24,8 @@ export const projects = [
   },
   {
     index: 2,
-    title: "Studio Website",
-    displayTitle: "Studio\nWebsite",
+    title: "School's Portfolio Website",
+    displayTitle: "School's Portfolio\nWebsite",
     category: "Agency Site",
     url: "https://sps-naguran.vercel.app",
     tech: ["React", "Vite", "Framer Motion"],

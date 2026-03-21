@@ -35,7 +35,7 @@ export const projectContext = [
     ],
   },
   {
-    title: "Studio Website",
+    title: "School's Portfolio Website",
     problem:  "The business lacked an online presence and clear communication of services.",
     solution: "Built a clean and structured website focused on clarity and usability.",
     impact: [
