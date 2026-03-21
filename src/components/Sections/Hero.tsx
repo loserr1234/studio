@@ -50,15 +50,11 @@ export const Hero = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // ── Screen 1: "Studio." clip-path wipe + skew settle ──
-      gsap.set(logoRef.current, { clipPath: 'inset(0 100% 0 0)', skewX: -8 });
-      gsap.to(logoRef.current, {
-        clipPath: 'inset(0 0% 0 0)',
-        skewX: 0,
-        duration: 1.4,
-        ease: 'expo.inOut',
-        delay: 0.5,
-      });
+      // ── Screen 1: "Studio." letter-spacing collapse + blur sharpen ──
+      gsap.fromTo(logoRef.current,
+        { opacity: 0, letterSpacing: '0.55em', filter: 'blur(18px)' },
+        { opacity: 1, letterSpacing: '-0.04em', filter: 'blur(0px)', duration: 1.6, ease: 'expo.out', delay: 0.4 }
+      );
 
       // ── Particle parallax scrub ──
       gsap.to(particles1Ref.current, {
@@ -95,7 +91,6 @@ export const Hero = () => {
             fontFamily: "'Playfair Display', serif",
             fontSize: 'clamp(5rem, 16vw, 15rem)',
             fontWeight: 700,
-            letterSpacing: '-0.04em',
             lineHeight: 1,
             color: 'rgba(255,255,255,0.92)',
           }}
