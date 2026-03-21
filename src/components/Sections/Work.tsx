@@ -7,7 +7,6 @@ import { projects } from '../../data/projects';
 const workProjects = [
   projects.find(p => p.title === 'JD & Dark Website')!,
   projects.find(p => p.title === 'School ERP System')!,
-  projects.find(p => p.title === 'Research AI RAG System')!,
 ];
 
 const PANEL_COUNT = workProjects.length + 1; // +1 for the "View All" panel
