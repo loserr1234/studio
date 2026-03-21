@@ -4,7 +4,7 @@ import { Points, PointMaterial } from '@react-three/drei';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { animateWords } from '../../utils/gsapText';
+import { animateScramble, animateWords } from '../../utils/gsapText';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -50,11 +50,8 @@ export const Hero = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // ── Screen 1: "Studio." letter-spacing collapse + blur sharpen ──
-      gsap.fromTo(logoRef.current,
-        { opacity: 0, letterSpacing: '0.55em', filter: 'blur(18px)' },
-        { opacity: 1, letterSpacing: '-0.04em', filter: 'blur(0px)', duration: 1.6, ease: 'expo.out', delay: 0.4 }
-      );
+      // ── Screen 1: "Studio." scramble reveal ──
+      animateScramble(logoRef.current, { delay: 0.3, cyclesPerChar: 16, speed: 0.036 });
 
       // ── Particle parallax scrub ──
       gsap.to(particles1Ref.current, {
@@ -91,11 +88,12 @@ export const Hero = () => {
             fontFamily: "'Playfair Display', serif",
             fontSize: 'clamp(5rem, 16vw, 15rem)',
             fontWeight: 700,
+            letterSpacing: '-0.04em',
             lineHeight: 1,
             color: 'rgba(255,255,255,0.92)',
           }}
         >
-          Studio<span style={{ color: '#E5C07B' }}>.</span>
+          Studio.
         </h1>
 
         {/* Scroll indicator */}
