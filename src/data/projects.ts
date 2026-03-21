@@ -1,0 +1,55 @@
+/**
+ * Shared project data — used in Work section (homepage) and ServicesPage (case studies)
+ */
+export const projects = [
+  {
+    index: 0,
+    title: "JD & Dark Website",
+    displayTitle: "JD & Dark\nWebsite",
+    category: "Web Application",
+    url: "https://jd-and-dark.vercel.app",
+    tech: ["React", "TailwindCSS", "Framer Motion"],
+    year: "2025",
+    image: "/projects/jd.png",
+  },
+  {
+    index: 1,
+    title: "School ERP System",
+    displayTitle: "School ERP\nSystem",
+    category: "Full Stack Platform",
+    url: "https://erp.stdn.in",
+    tech: ["React", "Node.js", "PostgreSQL", "Razorpay"],
+    year: "2026",
+    image: "/projects/erp.png",
+  },
+  {
+    index: 2,
+    title: "Studio Website",
+    displayTitle: "Studio\nWebsite",
+    category: "Agency Site",
+    url: "https://sps-naguran.vercel.app",
+    tech: ["React", "Vite", "Framer Motion"],
+    year: "2025",
+    image: "/projects/sps.png",
+  },
+  {
+    index: 3,
+    title: "Research AI RAG System",
+    displayTitle: "Research AI\nRAG System",
+    category: "AI Integration",
+    url: "https://research-ai-navy.vercel.app",
+    tech: ["Python", "FastAPI", "LLaMA 70B", "RAG"],
+    year: "2026",
+    image: "/projects/research.png",
+  },
+  {
+    index: 4,
+    title: "Customer Filter System",
+    displayTitle: "Customer\nFilter System",
+    category: "Business Automation",
+    url: "#",
+    tech: ["Node.js", "Automation", "Integrations"],
+    year: "2025",
+    image: "/projects/erp.png",
+  },
+];
