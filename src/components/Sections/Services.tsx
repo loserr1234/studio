@@ -113,11 +113,21 @@ export const Services = () => {
           </div>
         ))}
 
-        <div className="mt-20 md:mt-28 flex justify-end">
-          <p className="text-white/30 text-base md:text-lg font-light max-w-md text-right leading-relaxed">
+        <div className="mt-20 md:mt-28 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+          <p className="text-white/30 text-base md:text-lg font-light max-w-md leading-relaxed">
             We help businesses get real customers
             <span className="text-accent"> and run better systems.</span>
           </p>
+          <a
+            href="/services"
+            className="group relative inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/20 text-white text-sm font-semibold tracking-wide uppercase overflow-hidden hover:border-accent active:scale-[0.97] transition-all duration-300 flex-shrink-0"
+          >
+            <span className="absolute inset-0 rounded-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-in-out" />
+            <span className="relative z-10 group-hover:text-black transition-colors duration-300 delay-100">Our Services</span>
+            <span className="relative z-10 group-hover:text-black transition-colors duration-300 delay-100">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </span>
+          </a>
         </div>
       </div>
     </section>
