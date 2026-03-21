@@ -21,6 +21,11 @@
   }
 }
 
+html {
+  /* Force Safari to use the display's native refresh rate */
+  scroll-behavior: auto;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -28,6 +33,16 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* GPU compositing layer for smooth Safari rendering */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Promote scrolling container to GPU layer on Safari */
+#root {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 /* Custom Cursor styling hide default */
