@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState, useMemo } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -629,6 +630,69 @@ function ServicesCTA() {
 }
 
 /* ─────────────────────────────────────────
+   SCHEMA
+───────────────────────────────────────── */
+const servicesSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      '@id': 'https://www.stdn.in/#service-web',
+      name: 'Web Design & Development',
+      description: 'Custom websites and web applications built with React, focused on conversion and practical use.',
+      provider: { '@id': 'https://www.stdn.in/#organization' },
+      serviceType: 'Web Development',
+      areaServed: { '@type': 'Country', name: 'India' },
+    },
+    {
+      '@type': 'Service',
+      '@id': 'https://www.stdn.in/#service-funnel',
+      name: 'Sales Funnel & Customer Acquisition',
+      description: 'Structured landing flows and customer journey design to filter low-intent users and convert high-intent visitors.',
+      provider: { '@id': 'https://www.stdn.in/#organization' },
+      serviceType: 'Digital Marketing',
+      areaServed: { '@type': 'Country', name: 'India' },
+    },
+    {
+      '@type': 'Service',
+      '@id': 'https://www.stdn.in/#service-ai',
+      name: 'AI Tools & Custom AI Agents',
+      description: 'Custom AI systems and customer-facing agents that handle FAQs, pricing, and bookings 24/7.',
+      provider: { '@id': 'https://www.stdn.in/#organization' },
+      serviceType: 'Artificial Intelligence',
+      areaServed: { '@type': 'Country', name: 'India' },
+    },
+    {
+      '@type': 'Service',
+      '@id': 'https://www.stdn.in/#service-automation',
+      name: 'Business Process Automation',
+      description: 'Automating repetitive tasks including payments, follow-ups, reminders, and backend workflow automation.',
+      provider: { '@id': 'https://www.stdn.in/#organization' },
+      serviceType: 'Business Automation',
+      areaServed: { '@type': 'Country', name: 'India' },
+    },
+    {
+      '@type': 'Service',
+      '@id': 'https://www.stdn.in/#service-software',
+      name: 'Custom Business Software',
+      description: 'Custom ERP, clinic management, inventory systems, and admin dashboards for schools, clinics, and businesses.',
+      provider: { '@id': 'https://www.stdn.in/#organization' },
+      serviceType: 'Custom Software Development',
+      areaServed: { '@type': 'Country', name: 'India' },
+    },
+  ],
+};
+
+const servicesBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stdn.in' },
+    { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://www.stdn.in/services' },
+  ],
+};
+
+/* ─────────────────────────────────────────
    PAGE
 ───────────────────────────────────────── */
 export default function ServicesPage() {
@@ -667,6 +731,10 @@ export default function ServicesPage() {
 
   return (
     <div className="relative min-h-screen bg-background text-foreground font-sans overflow-x-hidden">
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(servicesSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(servicesBreadcrumb)}</script>
+      </Helmet>
       <CustomCursor />
       {/* Ambient orbs */}
       <div aria-hidden="true" className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-accent/5 blur-[120px] pointer-events-none z-0" />
@@ -675,11 +743,10 @@ export default function ServicesPage() {
       {/* Fixed logo */}
       <Link
         to="/"
-        className="group relative fixed top-5 left-6 z-[70] text-3xl font-bold tracking-tighter hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm btn-dot"
-        style={{ transition: 'color 0.3s ease' }}
+        className="fixed top-5 left-6 z-[70] text-4xl font-bold tracking-tighter text-white focus-visible:outline-none"
+        style={{ fontFamily: "'Playfair Display', serif" }}
       >
-        <span className="relative z-10 flex items-center">Studio.</span>
-        <span className="absolute -bottom-0.5 left-0 h-px w-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out" />
+        Studio.
       </Link>
 
       {/* Back button */}

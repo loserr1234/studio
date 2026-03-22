@@ -56,11 +56,10 @@ export const Navbar = () => {
       {/* ── Fixed logo — always top-left ── */}
       <a
         href="/"
-        className="group relative fixed top-5 left-6 z-[70] text-2xl font-bold tracking-tighter hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm btn-dot"
-        style={{ fontFamily: "'Playfair Display', serif", transition: 'color 0.3s ease' }}
+        className="fixed top-5 left-6 z-[70] text-4xl font-bold tracking-tighter text-white focus-visible:outline-none"
+        style={{ fontFamily: "'Playfair Display', serif" }}
       >
-        <span className="relative z-10 flex items-center">Studio.</span>
-        <span className="absolute -bottom-0.5 left-0 h-px w-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out" />
+        Studio.
       </a>
 
       {/* ── Regular navbar — absolute, scrolls away with page ── */}

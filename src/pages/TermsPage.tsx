@@ -15,7 +15,7 @@ export default function TermsPage() {
 
       {/* Nav */}
       <header className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 md:px-12 h-20">
-        <Link to="/" className="text-2xl font-bold tracking-tighter hover:text-accent transition-colors duration-300"
+        <Link to="/" className="text-4xl font-bold tracking-tighter text-white focus-visible:outline-none"
           style={{ fontFamily: "'Playfair Display', serif" }}>
           Studio.
         </Link>

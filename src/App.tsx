@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { getLenis } from './lib/lenisInstance';
 import Lenis from 'lenis';
@@ -22,9 +23,24 @@ import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsPage from './pages/TermsPage';
 import { FloatingShape } from './components/Layout/FloatingShape';
 
+const webPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': 'https://www.stdn.in/#webpage',
+  url: 'https://www.stdn.in',
+  name: 'Studio — Web Design, AI Tools & Automation | stdn.in',
+  description: 'Indian digital studio building websites, AI agents, and custom software.',
+  isPartOf: { '@id': 'https://www.stdn.in/#website' },
+  about: { '@id': 'https://www.stdn.in/#organization' },
+  inLanguage: 'en',
+};
+
 function HomePage() {
   return (
     <div className="relative min-h-screen bg-background text-foreground selection:bg-accent selection:text-black font-sans overflow-x-hidden">
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(webPageSchema)}</script>
+      </Helmet>
       {/* Ambient background orbs */}
       <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-accent/5 blur-[120px] pointer-events-none z-0" />
       <div className="fixed bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-accent/5 blur-[120px] pointer-events-none z-0" />

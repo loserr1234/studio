@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
@@ -81,6 +82,15 @@ const SERVICES = [
   'Automation',
   'Business Software',
 ];
+
+const contactBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stdn.in' },
+    { '@type': 'ListItem', position: 2, name: 'Contact', item: 'https://www.stdn.in/contact' },
+  ],
+};
 
 const BUDGETS = [
   'Under ₹10k',
@@ -188,6 +198,9 @@ export default function ContactPage() {
 
   return (
     <div className="relative min-h-screen bg-[#060606] text-white font-sans overflow-x-hidden selection:bg-accent selection:text-black">
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(contactBreadcrumb)}</script>
+      </Helmet>
       <style>{`
         select option { background: #0f0f0f; color: rgba(255,255,255,0.9); }
       `}</style>
@@ -220,11 +233,10 @@ export default function ContactPage() {
       <header className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 md:px-12 h-20">
         <Link
           to="/"
-          className="group relative text-2xl font-bold tracking-tighter hover:text-accent transition-colors duration-300"
+          className="text-4xl font-bold tracking-tighter text-white focus-visible:outline-none"
           style={{ fontFamily: "'Playfair Display', serif" }}
         >
           Studio.
-          <span className="absolute -bottom-0.5 left-0 h-px w-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out" />
         </Link>
         <Link
           to="/"

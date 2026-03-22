@@ -1,4 +1,5 @@
 import { useRef, useEffect, useMemo } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -584,6 +585,69 @@ function ProjectsFooter() {
   );
 }
 
+/* ── Schema ── */
+const projectsItemList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Studio Portfolio',
+  url: 'https://www.stdn.in/projects',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      item: {
+        '@type': 'CreativeWork',
+        name: 'JD & Dark Website',
+        url: 'https://jd-and-dark.vercel.app',
+        dateCreated: '2025',
+        creator: { '@id': 'https://www.stdn.in/#organization' },
+      },
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      item: {
+        '@type': 'CreativeWork',
+        name: 'School ERP System',
+        url: 'https://erp.stdn.in',
+        dateCreated: '2026',
+        creator: { '@id': 'https://www.stdn.in/#organization' },
+      },
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      item: {
+        '@type': 'CreativeWork',
+        name: 'School Portfolio Website',
+        url: 'https://sps-naguran.vercel.app',
+        dateCreated: '2025',
+        creator: { '@id': 'https://www.stdn.in/#organization' },
+      },
+    },
+    {
+      '@type': 'ListItem',
+      position: 4,
+      item: {
+        '@type': 'CreativeWork',
+        name: 'Research AI RAG System',
+        url: 'https://research-ai-navy.vercel.app',
+        dateCreated: '2026',
+        creator: { '@id': 'https://www.stdn.in/#organization' },
+      },
+    },
+  ],
+};
+
+const projectsBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.stdn.in' },
+    { '@type': 'ListItem', position: 2, name: 'Projects', item: 'https://www.stdn.in/projects' },
+  ],
+};
+
 /* ── Page ── */
 export default function ProjectsPage() {
   // Hash scroll on mount (deep-link from homepage project card)
@@ -611,6 +675,10 @@ export default function ProjectsPage() {
 
   return (
     <div className="relative min-h-screen bg-background text-foreground font-sans overflow-x-hidden">
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(projectsItemList)}</script>
+        <script type="application/ld+json">{JSON.stringify(projectsBreadcrumb)}</script>
+      </Helmet>
       <style>{CSS}</style>
       <CustomCursor />
 
@@ -623,11 +691,10 @@ export default function ProjectsPage() {
       {/* Fixed logo */}
       <Link
         to="/"
-        className="group relative fixed top-5 left-6 z-[70] text-3xl font-bold tracking-tighter hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm btn-dot"
-        style={{ transition: 'color 0.3s ease' }}
+        className="fixed top-5 left-6 z-[70] text-4xl font-bold tracking-tighter text-white focus-visible:outline-none"
+        style={{ fontFamily: "'Playfair Display', serif" }}
       >
-        <span className="relative z-10 flex items-center">Studio.</span>
-        <span className="absolute -bottom-0.5 left-0 h-px w-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out" />
+        Studio.
       </Link>
 
       {/* Back */}
