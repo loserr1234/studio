@@ -147,10 +147,11 @@ export const Hero = () => {
     <>
       {/* ── Screen 1 ── */}
       <section id="hero" ref={screen1Ref} className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-background">
-        <div ref={particles1Ref} className="absolute inset-0 z-0 opacity-70">
+        <div ref={particles1Ref} className="absolute inset-0 z-0 opacity-70" style={{ willChange: 'transform' }}>
           {webglSupported === true && (
             <CanvasErrorBoundary>
               <Canvas
+                frameloop="always"
                 camera={{ position: [0, 0, 3] }}
                 dpr={[1, 1.5]}
                 gl={{ alpha: true, powerPreference: 'default', antialias: false, failIfMajorPerformanceCaveat: false }}
@@ -198,10 +199,11 @@ export const Hero = () => {
 
       {/* ── Screen 2 ── */}
       <section ref={screen2Ref} className="relative w-full min-h-screen flex items-center overflow-hidden bg-background">
-        <div ref={particles2Ref} className="absolute inset-0 z-0 opacity-40">
+        <div ref={particles2Ref} className="absolute inset-0 z-0 opacity-40" style={{ willChange: 'transform' }}>
           {webglSupported === true && (
             <CanvasErrorBoundary>
               <Canvas
+                frameloop="always"
                 camera={{ position: [0, 0, 3] }}
                 dpr={[1, 1.5]}
                 gl={{ alpha: true, powerPreference: 'default', antialias: false, failIfMajorPerformanceCaveat: false }}

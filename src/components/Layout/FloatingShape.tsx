@@ -74,7 +74,7 @@ export function FloatingShape({
     <div
       ref={containerRef}
       className="pointer-events-none absolute max-sm:scale-50 max-sm:opacity-20"
-      style={{ width: size, height: size, ...style }}
+      style={{ width: size, height: size, willChange: 'transform, opacity', ...style }}
       aria-hidden="true"
     >
       {inView && (

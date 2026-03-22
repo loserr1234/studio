@@ -20,13 +20,11 @@ const CSS = `
   @media (prefers-reduced-motion: reduce) { .wk-ticker { animation: none; } }
 
   .wk-reveal-title {
-    clip-path: inset(0 0 100% 0);
-    transform: translateY(16px);
-    transition: clip-path 0.7s cubic-bezier(0.16,1,0.3,1),
-                transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    transform: translateY(105%);
+    will-change: transform;
+    transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
   }
   .wk-reveal-title.active {
-    clip-path: inset(0 0 0% 0);
     transform: translateY(0);
   }
 
@@ -103,14 +101,20 @@ export const Work = () => {
     return () => cancelAnimationFrame(rafId);
   }, [onFrame]);
 
-  /* ── mouse tilt ── */
+  /* ── mouse tilt — RAF-throttled so it never fires faster than the display refresh ── */
   useEffect(() => {
-    const h = (e: MouseEvent) => setMouse({
-      x: (e.clientX / window.innerWidth  - 0.5) * 2,
-      y: (e.clientY / window.innerHeight - 0.5) * 2,
-    });
+    let rafId: number;
+    const h = (e: MouseEvent) => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        setMouse({
+          x: (e.clientX / window.innerWidth  - 0.5) * 2,
+          y: (e.clientY / window.innerHeight - 0.5) * 2,
+        });
+      });
+    };
     window.addEventListener('mousemove', h, { passive: true });
-    return () => window.removeEventListener('mousemove', h);
+    return () => { window.removeEventListener('mousemove', h); cancelAnimationFrame(rafId); };
   }, []);
 
   const handleProjectClick = (projectIndex: number) => {

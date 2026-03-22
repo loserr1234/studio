@@ -15,11 +15,15 @@ export const Navbar = () => {
   const prefersReduced = useReducedMotion();
   const firstLinkRef   = useRef<HTMLAnchorElement>(null);
 
-  /* scroll detection */
+  /* scroll detection — RAF-throttled so React state update stays in sync with frame budget */
   useEffect(() => {
-    const fn = () => setHasScrolled(window.scrollY > 80);
+    let rafId: number;
+    const fn = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => setHasScrolled(window.scrollY > 80));
+    };
     window.addEventListener('scroll', fn, { passive: true });
-    return () => window.removeEventListener('scroll', fn);
+    return () => { window.removeEventListener('scroll', fn); cancelAnimationFrame(rafId); };
   }, []);
 
   /* lock body scroll */

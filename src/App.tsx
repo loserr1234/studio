@@ -41,9 +41,9 @@ function HomePage() {
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(webPageSchema)}</script>
       </Helmet>
-      {/* Ambient background orbs */}
-      <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-accent/5 blur-[120px] pointer-events-none z-0" />
-      <div className="fixed bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-accent/5 blur-[120px] pointer-events-none z-0" />
+      {/* Ambient background orbs — radial-gradient instead of filter:blur to avoid Safari compositor downclocking to 60Hz */}
+      <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] pointer-events-none z-0" style={{ background: 'radial-gradient(circle, rgba(229,192,123,0.07) 0%, transparent 70%)' }} />
+      <div className="fixed bottom-[-20%] right-[-10%] w-[50%] h-[50%] pointer-events-none z-0" style={{ background: 'radial-gradient(circle, rgba(229,192,123,0.07) 0%, transparent 70%)' }} />
 
       <CustomCursor />
       <Navbar />
@@ -125,7 +125,7 @@ function ScrollToTop() {
 function App() {
   useEffect(() => {
     const lenis = new Lenis({
-      lerp: 0.1,
+      lerp: 0.08,
       smoothWheel: true,
       wheelMultiplier: 1,
       touchMultiplier: 2,
