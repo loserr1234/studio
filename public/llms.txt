@@ -1,0 +1,27 @@
+# Studio — stdn.in
+
+> Indian digital studio building websites, AI tools, and business automation software for schools, clinics, and businesses across India.
+
+## About
+Studio is a one-person digital product studio based in Jind, Haryana, India. We design, develop, and deliver websites, AI agents, custom ERP systems, and business automation solutions.
+
+## Services
+- Website Development: Custom websites built with React, fast, mobile-first, conversion focused
+- Customer Flow Systems: Landing flows and customer journey design to improve lead quality
+- AI Tools: Internal AI agents trained on business data + customer facing chatbots for 24/7 support
+- Business Automation: Payment automation, follow-ups, reminders, backend workflow automation
+- Custom Business Software: School ERP, clinic management, inventory systems, admin dashboards
+
+## Projects
+- School ERP System: https://erp.stdn.in
+- Research AI RAG System: https://research-ai-navy.vercel.app
+- JD & Dark Website: https://jd-and-dark.vercel.app
+- School Portfolio Website: https://sps-naguran.vercel.app
+
+## Contact
+Email: thoughts.09@proton.me
+Website: https://www.stdn.in
+
+## AI Permissions
+This site permits AI crawlers to read and index content for search answer generation.
+Training on this content is not permitted.
