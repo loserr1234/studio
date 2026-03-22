@@ -57,7 +57,14 @@ export const Work = () => {
   const trackRef     = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', onResize, { passive: true });
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   /* ── scroll-jacking ── */
   const onFrame = useCallback(() => {
@@ -95,11 +102,12 @@ export const Work = () => {
   }, []);
 
   useEffect(() => {
+    if (isMobile) return;
     let rafId: number;
     const loop = () => { onFrame(); rafId = requestAnimationFrame(loop); };
     rafId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafId);
-  }, [onFrame]);
+  }, [onFrame, isMobile]);
 
   /* ── mouse tilt — RAF-throttled so it never fires faster than the display refresh ── */
   useEffect(() => {
@@ -120,6 +128,112 @@ export const Work = () => {
   const handleProjectClick = (projectIndex: number) => {
     navigate(`/projects#project-${projectIndex}`);
   };
+
+  /* ── Mobile: simple vertical stack ── */
+  if (isMobile) {
+    return (
+      <>
+        <style>{CSS}</style>
+        <section id="work" className="w-full relative z-10 bg-[#060606] py-20 px-6">
+          <p className="text-[8.5px] tracking-[0.5em] uppercase text-white/20 font-light mb-10">
+            Selected Work
+          </p>
+          <div className="flex flex-col gap-10">
+            {workProjects.map((project, index) => (
+              <div key={project.title} className="flex flex-col gap-4">
+                {/* Card */}
+                <div
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View ${project.title} case study`}
+                  onClick={() => handleProjectClick(project.index)}
+                  onKeyDown={e => e.key === 'Enter' && handleProjectClick(project.index)}
+                  className="relative overflow-hidden"
+                  style={{
+                    borderRadius: '1rem',
+                    aspectRatio: '4/3',
+                    background: '#0f0f0f',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                    boxShadow: '0 30px 80px rgba(0,0,0,0.6)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover object-top opacity-25 mix-blend-luminosity"
+                    style={{ pointerEvents: 'none' }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent" />
+                  {/* Top */}
+                  <div className="absolute top-4 inset-x-4 flex items-center justify-between">
+                    <span className="text-[8px] tracking-[0.3em] uppercase font-medium text-white/50">
+                      {project.category}
+                    </span>
+                    <span className="text-white/20 text-[9px] tabular-nums tracking-widest">
+                      {project.year}
+                    </span>
+                  </div>
+                  {/* Bottom */}
+                  <div className="absolute bottom-0 inset-x-0 px-4 py-3 flex items-center justify-between">
+                    <a
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={e => e.stopPropagation()}
+                      className="flex items-center gap-2 text-white/30 text-[8.5px] tracking-[0.3em] uppercase"
+                    >
+                      View Live <ArrowUpRight size={10} aria-hidden="true" />
+                    </a>
+                    <span className="text-white/15 text-[8px] tabular-nums">
+                      {String(index + 1).padStart(2, '0')} / {String(workProjects.length).padStart(2, '0')}
+                    </span>
+                  </div>
+                </div>
+                {/* Text */}
+                <div className="flex flex-col gap-3">
+                  <h3
+                    className="font-bold tracking-tighter leading-[0.9]"
+                    style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 8vw, 3rem)' }}
+                  >
+                    {project.displayTitle}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tech.map(t => (
+                      <span
+                        key={t}
+                        className="px-3 py-1 rounded-full border border-white/[0.08] bg-white/[0.02] text-[8px] text-white/30 font-light tracking-wide"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {/* View all */}
+            <div className="flex flex-col items-center gap-6 text-center pt-6">
+              <h3
+                className="font-bold tracking-tighter leading-[0.9]"
+                style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2.2rem, 10vw, 4rem)' }}
+              >
+                See everything<br />
+                <span className="italic text-accent">we've built.</span>
+              </h3>
+              <Link
+                to="/projects"
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-black text-sm font-semibold tracking-wide uppercase"
+              >
+                View All Projects <ArrowUpRight className="w-4 h-4" strokeWidth={2.5} />
+              </Link>
+            </div>
+          </div>
+        </section>
+      </>
+    );
+  }
 
   return (
     <>
