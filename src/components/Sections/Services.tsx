@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { animateScramble, animateWords } from '../../utils/gsapText';
+import { animateChars, animateWords, animateBlurIn } from '../../utils/gsapText';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,14 +16,16 @@ const services = [
 export const Services = () => {
   const sectionRef   = useRef<HTMLElement>(null);
   const sectionHRef  = useRef<HTMLHeadingElement>(null);
+  const kickerRef    = useRef<HTMLParagraphElement>(null);
   const titleRefs    = useRef<HTMLHeadingElement[]>([]);
   const descRefs     = useRef<HTMLParagraphElement[]>([]);
   const numRefs      = useRef<HTMLSpanElement[]>([]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Section heading: scramble encode effect
-      animateScramble(sectionHRef.current, { start: 'top 80%' });
+      // Header animations
+      animateChars(kickerRef.current, { start: 'top 85%', once: true });
+      animateBlurIn(sectionHRef.current, { start: 'top 80%', once: true });
 
       // Each service: number pop + title word reveal + desc fade
       titleRefs.current.forEach((el) => {
@@ -65,7 +67,7 @@ export const Services = () => {
     <section id="services" ref={sectionRef} className="w-full py-32 md:py-48 px-6 bg-background relative z-10">
       <div className="max-w-7xl mx-auto">
         <div className="mb-24 md:mb-32">
-          <p className="text-accent text-sm tracking-[0.3em] uppercase mb-6 font-light">What We Do</p>
+          <p ref={kickerRef} className="text-accent text-sm tracking-[0.3em] uppercase mb-6 font-light">What We Do</p>
           <h2
             ref={sectionHRef}
             className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.95]"
