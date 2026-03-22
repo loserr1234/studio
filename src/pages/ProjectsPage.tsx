@@ -161,7 +161,7 @@ function ProjectsHero() {
         style={{ backgroundImage: GRAIN, backgroundSize: '180px 180px' }} />
 
       {/* 3D wave + particles backdrop */}
-      <div aria-hidden="true" className="absolute inset-0 z-0 pointer-events-none opacity-40 md:opacity-100">
+      <div aria-hidden="true" className="absolute inset-0 z-0 pointer-events-none">
         <Canvas camera={{ position: [0, 0, 4], fov: 60 }}>
           <ambientLight intensity={0.4} />
           <pointLight position={[4, 4, 4]} intensity={1.5} color="#E5C07B" />

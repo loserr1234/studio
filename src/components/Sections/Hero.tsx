@@ -114,7 +114,7 @@ export const Hero = () => {
     <>
       {/* ── Screen 1 ── */}
       <section id="hero" ref={screen1Ref} className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-background">
-        <div ref={particles1Ref} className="absolute inset-0 z-0 opacity-25 md:opacity-70 pointer-events-none md:pointer-events-auto">
+        <div ref={particles1Ref} className="absolute inset-0 z-0 opacity-70">
           <Canvas camera={{ position: [0, 0, 3] }}><ParticleCloud /></Canvas>
         </div>
 
@@ -155,7 +155,7 @@ export const Hero = () => {
 
       {/* ── Screen 2 ── */}
       <section ref={screen2Ref} className="relative w-full min-h-screen flex items-center overflow-hidden bg-background">
-        <div ref={particles2Ref} className="absolute inset-0 z-0 opacity-15 md:opacity-40 pointer-events-none md:pointer-events-auto">
+        <div ref={particles2Ref} className="absolute inset-0 z-0 opacity-40">
           <Canvas camera={{ position: [0, 0, 3] }}><ParticleCloud /></Canvas>
         </div>
 

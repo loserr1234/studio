@@ -366,12 +366,12 @@ function ServiceSection({ service, index }: { service: typeof services[0]; index
           <AnimatedStat value={service.stat.value} label={service.stat.label} color={service.color} />
         </div>
 
-        {/* 3D canvas side — desktop only */}
+        {/* 3D canvas side */}
         <motion.div
           initial={{ opacity: 0, scale: 0.85 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
           transition={{ delay: 0.2, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className={`svc-canvas-card relative h-[240px] md:h-[440px] rounded-3xl overflow-hidden ${isEven ? '' : 'lg:col-start-1 lg:row-start-1'}`}
+          className={`svc-canvas-card relative h-[340px] md:h-[440px] rounded-3xl overflow-hidden ${isEven ? '' : 'lg:col-start-1 lg:row-start-1'}`}
           style={{
             background: `radial-gradient(ellipse at center, ${service.glow.replace('0.15', '0.35')}, #060606 70%)`,
             boxShadow: `0 0 80px ${service.color}22, 0 0 0 1px ${service.color}18`,
@@ -390,15 +390,12 @@ function ServiceSection({ service, index }: { service: typeof services[0]; index
             }}
           />
 
-          {/* 3D shape */}
-          <div className="w-full h-full pointer-events-none md:pointer-events-auto opacity-50 md:opacity-100 scale-75 md:scale-100 transition-all duration-500">
-            <Canvas camera={{ position: [0, 0, 3.2], fov: 45 }}>
-              <ambientLight intensity={0.5} />
-              <pointLight position={[4, 4, 4]} intensity={2} color={service.color} />
-              <pointLight position={[-4, -2, -4]} intensity={1} color="#ffffff" />
-              <FloatingShape shape={service.shape} color={service.color} />
-            </Canvas>
-          </div>
+          <Canvas camera={{ position: [0, 0, 3.2], fov: 45 }}>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[4, 4, 4]} intensity={2} color={service.color} />
+            <pointLight position={[-4, -2, -4]} intensity={1} color="#ffffff" />
+            <FloatingShape shape={service.shape} color={service.color} />
+          </Canvas>
 
           {/* Corner label */}
           <div className="absolute bottom-5 left-5 pointer-events-none">
@@ -457,7 +454,7 @@ function ServicesHero() {
   return (
     <section ref={ref} className="relative w-full h-screen flex items-center overflow-hidden">
       {/* Three.js particles + wireframe globe */}
-      <div className="svchero-particles absolute inset-0 z-0 pointer-events-none md:pointer-events-auto opacity-40 md:opacity-100">
+      <div className="svchero-particles absolute inset-0 z-0">
         <Canvas camera={{ position: [0, 0, 3], fov: 60 }}>
           <ambientLight intensity={0.3} />
           <ParticleField />

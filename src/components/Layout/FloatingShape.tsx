@@ -55,7 +55,7 @@ export function FloatingShape({
 }: FloatingShapeProps) {
   return (
     <div
-      className="pointer-events-none absolute opacity-30 md:opacity-100 scale-50 md:scale-100 transition-all duration-500 ease-in-out"
+      className="pointer-events-none absolute"
       style={{ width: size, height: size, ...style }}
       aria-hidden="true"
     >
