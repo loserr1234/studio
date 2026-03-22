@@ -700,12 +700,11 @@ export default function ProjectsPage() {
       {/* Back */}
       <Link
         to="/"
-        className="group relative fixed top-[1.55rem] right-6 z-[70] flex items-center gap-2 text-white/35 hover:text-white text-[8.5px] tracking-[0.45em] uppercase focus-visible:outline-none btn-dot"
+        className="fixed top-6 right-6 z-[70] flex items-center gap-2 text-white/50 hover:text-white text-sm tracking-widest uppercase focus-visible:outline-none"
         style={{ transition: 'color 0.3s ease' }}
       >
-        <ArrowLeft size={12} aria-hidden="true" className="relative z-10 transition-transform duration-300 group-hover:-translate-x-1" />
-        <span className="relative z-10 flex items-center">Home</span>
-        <span className="absolute -bottom-0.5 left-4 h-px w-0 group-hover:w-[calc(100%-1rem)] bg-current/40 transition-all duration-300 ease-out" />
+        <ArrowLeft size={16} aria-hidden="true" />
+        Home
       </Link>
 
       <main className="relative z-10">

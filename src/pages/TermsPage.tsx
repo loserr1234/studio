@@ -19,9 +19,10 @@ export default function TermsPage() {
           style={{ fontFamily: "'Playfair Display', serif" }}>
           Studio.
         </Link>
-        <Link to="/" className="group flex items-center gap-2 text-[11px] tracking-[0.3em] uppercase text-white/40 hover:text-white transition-colors duration-300">
-          <ArrowLeft className="w-3.5 h-3.5 transition-transform duration-300 group-hover:-translate-x-1" />
-          Back
+        <Link to="/" className="flex items-center gap-2 text-sm tracking-widest uppercase text-white/50 hover:text-white focus-visible:outline-none"
+          style={{ transition: 'color 0.3s ease' }}>
+          <ArrowLeft size={16} aria-hidden="true" />
+          Home
         </Link>
       </header>
 

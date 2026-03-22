@@ -240,11 +240,11 @@ export default function ContactPage() {
         </Link>
         <Link
           to="/"
-          className="group relative flex items-center gap-2 text-[11px] tracking-[0.3em] uppercase text-white/40 hover:text-white transition-colors duration-300 btn-dot"
+          className="flex items-center gap-2 text-sm tracking-widest uppercase text-white/50 hover:text-white focus-visible:outline-none"
+          style={{ transition: 'color 0.3s ease' }}
         >
-          <ArrowLeft className="w-3.5 h-3.5 transition-transform duration-300 group-hover:-translate-x-1 relative z-10" />
-          <span className="relative z-10 flex items-center">Back</span>
-          <span className="absolute -bottom-0.5 left-5 h-px w-0 group-hover:w-[calc(100%-1.25rem)] bg-current/40 transition-all duration-300 ease-out" />
+          <ArrowLeft size={16} aria-hidden="true" />
+          Home
         </Link>
       </header>
 
