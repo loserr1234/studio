@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { animateChars } from '../../utils/gsapText';
@@ -38,10 +39,9 @@ export const Footer = () => {
 
         <div className="footer-meta flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-white/40 text-sm">&copy; {new Date().getFullYear()} Studio. All rights reserved.</p>
-          <div className="flex gap-8">
-            <a href="#" className="text-white/40 hover:text-accent transition-colors text-sm btn-dot"><span className="relative z-10 flex items-center">Twitter</span></a>
-            <a href="#" className="text-white/40 hover:text-accent transition-colors text-sm btn-dot"><span className="relative z-10 flex items-center">LinkedIn</span></a>
-            <a href="#" className="text-white/40 hover:text-accent transition-colors text-sm btn-dot"><span className="relative z-10 flex items-center">Instagram</span></a>
+          <div className="flex gap-6">
+            <Link to="/privacy-policy" className="text-white/40 hover:text-accent transition-colors text-sm">Privacy Policy</Link>
+            <Link to="/terms" className="text-white/40 hover:text-accent transition-colors text-sm">Terms</Link>
           </div>
           <button onClick={scrollToTop} className="text-white/40 hover:text-accent transition-colors duration-300 text-sm flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm bg-transparent border-none btn-dot">
             <span className="relative z-10 flex items-center">Back to top</span>
