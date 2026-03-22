@@ -73,7 +73,7 @@ export function FloatingShape({
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none absolute"
+      className="pointer-events-none absolute max-sm:scale-50 max-sm:opacity-20"
       style={{ width: size, height: size, ...style }}
       aria-hidden="true"
     >
