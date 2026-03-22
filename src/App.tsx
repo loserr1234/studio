@@ -122,8 +122,18 @@ function ScrollToTop() {
   return null;
 }
 
+// Safari detection — excludes Chrome on iOS (which also has AppleWebKit)
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
 function App() {
   useEffect(() => {
+    // Skip Lenis on Safari — native scroll lets Safari run at full ProMotion refresh rate
+    if (isSafari) {
+      gsap.ticker.lagSmoothing(0);
+      setTimeout(() => ScrollTrigger.refresh(), 200);
+      return;
+    }
+
     const lenis = new Lenis({
       lerp: 0.08,
       smoothWheel: true,
