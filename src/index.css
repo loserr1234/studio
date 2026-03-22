@@ -30,6 +30,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Enforce minimum 16px — override all small text utilities */
+.text-xs,
+.text-sm,
+.text-\[8\.5px\],
+.text-\[9px\],
+.text-\[10px\],
+.text-\[11px\],
+.text-\[12px\],
+.text-\[13px\],
+.text-\[14px\],
+.text-\[15px\] {
+  font-size: 16px !important;
+}
+
 /*
  * Safari ProMotion (120Hz) unlock.
  * Safari only enables high refresh rate when a CSS animation is active.
