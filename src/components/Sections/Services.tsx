@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { animateChars, animateWords } from '../../utils/gsapText';
+import { animateScramble, animateWords } from '../../utils/gsapText';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,8 +22,8 @@ export const Services = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Section heading: char reveal
-      animateChars(sectionHRef.current, { start: 'top 80%' });
+      // Section heading: scramble encode effect
+      animateScramble(sectionHRef.current, { start: 'top 80%' });
 
       // Each service: number pop + title word reveal + desc fade
       titleRefs.current.forEach((el) => {
@@ -75,7 +75,7 @@ export const Services = () => {
           </h2>
         </div>
 
-        <div className="svc-line h-px bg-white/10 origin-left" style={{ scaleX: 0 }} />
+        <div className="svc-line h-px bg-white/10 origin-left" style={{ transform: 'scaleX(0)' }} />
 
         {services.map((service, i) => (
           <div key={service.number}>
@@ -109,7 +109,7 @@ export const Services = () => {
                 </p>
               </div>
             </article>
-            <div className={`svc-line h-px origin-left ${i === services.length - 1 ? 'bg-white/10' : 'bg-white/[0.07]'}`} style={{ scaleX: 0 }} />
+            <div className={`svc-line h-px origin-left ${i === services.length - 1 ? 'bg-white/10' : 'bg-white/[0.07]'}`} style={{ transform: 'scaleX(0)' }} />
           </div>
         ))}
 
@@ -120,10 +120,10 @@ export const Services = () => {
           </p>
           <a
             href="/services"
-            className="group relative inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/20 text-white text-sm font-semibold tracking-wide uppercase overflow-hidden hover:border-accent active:scale-[0.97] transition-all duration-300 flex-shrink-0"
+            className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border border-white/20 text-white text-sm font-semibold tracking-wide uppercase overflow-hidden hover:border-accent active:scale-[0.97] transition-all duration-300 flex-shrink-0 btn-dot"
           >
             <span className="absolute inset-0 rounded-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-in-out" />
-            <span className="relative z-10 group-hover:text-black transition-colors duration-300 delay-100">Our Services</span>
+            <span className="relative z-10 group-hover:text-black transition-colors duration-300 delay-100 flex items-center">Our Services</span>
             <span className="relative z-10 group-hover:text-black transition-colors duration-300 delay-100">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
             </span>

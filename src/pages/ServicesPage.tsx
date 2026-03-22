@@ -1,13 +1,12 @@
 import { useRef, useEffect, useState, useMemo } from 'react';
-import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { animateChars, animateWords } from '../utils/gsapText';
 
 gsap.registerPlugin(ScrollTrigger);
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Points, PointMaterial, MeshDistortMaterial, Sphere, Torus } from '@react-three/drei';
-import * as THREE from 'three';
+import { Points, PointMaterial, MeshDistortMaterial, Edges } from '@react-three/drei';
 import { ArrowUpRight, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { CustomCursor } from '../components/Layout/CustomCursor';
@@ -132,6 +131,22 @@ function ParticleField({ count = 4000 }: { count?: number }) {
     <Points ref={ref} positions={positions} stride={3} frustumCulled={false}>
       <PointMaterial transparent color="#ffffff" size={0.01} sizeAttenuation depthWrite={false} opacity={0.35} />
     </Points>
+  );
+}
+
+function WireframeGlobe() {
+  const ref = useRef<any>(null);
+  useFrame((state) => {
+    if (!ref.current) return;
+    ref.current.rotation.y = state.clock.elapsedTime * 0.08;
+    ref.current.rotation.x = state.clock.elapsedTime * 0.04;
+  });
+  return (
+    <mesh ref={ref} position={[3.5, 0, -2]}>
+      <icosahedronGeometry args={[2.8, 1]} />
+      <meshBasicMaterial color="#E5C07B" transparent opacity={0} />
+      <Edges linewidth={0.8} threshold={5} color="#E5C07B" />
+    </mesh>
   );
 }
 
@@ -437,10 +452,12 @@ function ServicesHero() {
 
   return (
     <section ref={ref} className="relative w-full h-screen flex items-center overflow-hidden">
-      {/* Three.js particles */}
-      <div className="svchero-particles absolute inset-0 z-0 opacity-60">
+      {/* Three.js particles + wireframe globe */}
+      <div className="svchero-particles absolute inset-0 z-0">
         <Canvas camera={{ position: [0, 0, 3], fov: 60 }}>
+          <ambientLight intensity={0.3} />
           <ParticleField />
+          <WireframeGlobe />
         </Canvas>
       </div>
 
@@ -591,19 +608,19 @@ function ServicesCTA() {
           className="flex flex-wrap items-center justify-center gap-4"
         >
           <Link
-            to="/#contact"
-            className="inline-flex items-center gap-2 px-10 py-4 rounded-full bg-accent text-black font-semibold text-sm uppercase tracking-wide hover:bg-accent/80 active:scale-[0.97]"
+            to="/contact"
+            className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full bg-accent text-black font-semibold text-sm uppercase tracking-wide hover:bg-accent/80 active:scale-[0.97] btn-dot"
             style={{ transition: 'background-color 0.3s ease, transform 0.2s ease' }}
           >
-            Start Your Project
-            <ArrowUpRight size={16} aria-hidden="true" />
+            <span className="relative z-10 flex items-center">Start Your Project</span>
+            <ArrowUpRight size={16} aria-hidden="true" className="relative z-10" />
           </Link>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 px-10 py-4 rounded-full border border-white/15 bg-white/5 text-white text-sm uppercase tracking-wide hover:bg-white hover:text-black active:scale-[0.97]"
+            className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full border border-white/15 bg-white/5 text-white text-sm uppercase tracking-wide hover:bg-white hover:text-black active:scale-[0.97] btn-dot"
             style={{ transition: 'background-color 0.5s ease, color 0.5s ease' }}
           >
-            Back to Home
+            <span className="relative z-10 flex items-center">Back to Home</span>
           </Link>
         </motion.div>
       </div>
@@ -658,20 +675,22 @@ export default function ServicesPage() {
       {/* Fixed logo */}
       <Link
         to="/"
-        className="fixed top-5 left-6 z-[70] text-3xl font-bold tracking-tighter hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+        className="group relative fixed top-5 left-6 z-[70] text-3xl font-bold tracking-tighter hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm btn-dot"
         style={{ transition: 'color 0.3s ease' }}
       >
-        Studio.
+        <span className="relative z-10 flex items-center">Studio.</span>
+        <span className="absolute -bottom-0.5 left-0 h-px w-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out" />
       </Link>
 
       {/* Back button */}
       <Link
         to="/"
-        className="fixed top-[1.4rem] right-6 z-[70] flex items-center gap-2 text-white/50 hover:text-white text-xs tracking-widest uppercase focus-visible:outline-none"
+        className="group relative fixed top-[1.4rem] right-6 z-[70] flex items-center gap-2 text-white/50 hover:text-white text-xs tracking-widest uppercase focus-visible:outline-none btn-dot"
         style={{ transition: 'color 0.3s ease' }}
       >
-        <ArrowLeft size={14} aria-hidden="true" />
-        Home
+        <ArrowLeft size={14} aria-hidden="true" className="relative z-10 transition-transform duration-300 group-hover:-translate-x-1" />
+        <span className="relative z-10 flex items-center">Home</span>
+        <span className="absolute -bottom-0.5 left-5 h-px w-0 group-hover:w-[calc(100%-1.25rem)] bg-current/40 transition-all duration-300 ease-out" />
       </Link>
 
       {/* Sidebar nav */}

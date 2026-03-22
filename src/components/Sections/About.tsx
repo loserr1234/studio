@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { animateWords } from '../../utils/gsapText';
+import { animateBlurIn } from '../../utils/gsapText';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,8 +52,8 @@ export const About = () => {
         });
       });
 
-      // Main heading word reveal
-      animateWords(aboutHeadRef.current, { start: 'top 80%', stagger: 0.04 });
+      // Main heading: blur materialise
+      animateBlurIn(aboutHeadRef.current, { start: 'top 80%', stagger: 0.06 });
 
       // Philosophy list items stagger
       gsap.fromTo(

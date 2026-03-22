@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { ArrowUpRight } from 'lucide-react';
 
 const primaryLinks = ["Services", "Projects", "About", "Contact"];
 
@@ -54,11 +55,12 @@ export const Navbar = () => {
     <>
       {/* ── Fixed logo — always top-left ── */}
       <a
-        href="#"
-        className="fixed top-5 left-6 z-[70] text-3xl font-bold tracking-tighter hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
-        style={{ transition: 'color 0.3s ease' }}
+        href="/"
+        className="group relative fixed top-5 left-6 z-[70] text-2xl font-bold tracking-tighter hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm btn-dot"
+        style={{ fontFamily: "'Playfair Display', serif", transition: 'color 0.3s ease' }}
       >
-        Studio.
+        <span className="relative z-10 flex items-center">Studio.</span>
+        <span className="absolute -bottom-0.5 left-0 h-px w-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out" />
       </a>
 
       {/* ── Regular navbar — absolute, scrolls away with page ── */}
@@ -69,26 +71,32 @@ export const Navbar = () => {
               <a
                 key={item}
                 href={item === "Services" ? "/services" : item === "Projects" ? "/projects" : `#${item.toLowerCase()}`}
-                className="text-xs uppercase tracking-widest font-medium text-muted hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+                className="group relative text-xs uppercase tracking-widest font-medium text-muted hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
                 style={{ transition: 'color 0.3s ease' }}
               >
                 {item}
+                <span className="absolute -bottom-1 left-0 h-px w-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out" />
               </a>
             ))}
             <a
               href="/contact"
-              className="text-xs uppercase tracking-widest font-medium bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 rounded-full px-5 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              style={{ transition: 'background-color 0.3s ease' }}
+              className="group relative flex items-center gap-0 text-xs uppercase tracking-widest font-medium bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-5 py-2 overflow-hidden hover:border-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent btn-dot"
+              style={{ transition: 'border-color 0.4s ease' }}
             >
-              Get in touch
+              <span className="absolute inset-0 rounded-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
+              <span className="relative z-10 group-hover:text-black transition-colors duration-300 delay-75 flex items-center">Get in touch</span>
+              <span className="relative z-10 w-0 overflow-hidden group-hover:w-4 transition-all duration-300 group-hover:text-black">
+                <ArrowUpRight className="w-3.5 h-3.5" strokeWidth={2.5} />
+              </span>
             </a>
           </nav>
           <button
-            className="md:hidden text-foreground text-sm tracking-widest uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+            className="group md:hidden relative text-foreground text-sm tracking-widest uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm btn-dot"
             aria-label="Open navigation menu"
             onClick={() => setMenuOpen(true)}
           >
-            Menu
+            <span className="relative z-10 flex items-center">Menu</span>
+            <span className="absolute -bottom-0.5 left-0 h-px w-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out" />
           </button>
         </div>
       </header>
@@ -106,10 +114,10 @@ export const Navbar = () => {
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
             aria-controls="main-overlay-menu"
-            className="fixed top-[1.4rem] right-6 z-[70] w-10 h-10 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+            className="fixed top-[1.4rem] right-6 z-[70] w-10 h-10 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm btn-dot"
           >
             {/* Two lines that morph smoothly into × */}
-            <div className="relative w-6 h-[14px]">
+            <div className="relative w-6 h-[14px] z-10">
               <motion.span
                 className="absolute top-0 left-0 w-full h-px bg-white/90 rounded-full"
                 animate={menuOpen ? { y: 7, rotate: 45 } : { y: 0, rotate: 0 }}
@@ -189,10 +197,11 @@ export const Navbar = () => {
                       ref={i === 0 ? firstLinkRef : undefined}
                       href={item === "Services" ? "/services" : item === "Projects" ? "/projects" : item === "Contact" ? "/contact" : `#${item.toLowerCase()}`}
                       onClick={() => setMenuOpen(false)}
-                      className="block text-4xl md:text-5xl font-bold tracking-tighter text-white/80 hover:text-accent focus-visible:text-accent focus-visible:outline-none leading-tight py-1"
+                      className="group relative block text-4xl md:text-5xl font-bold tracking-tighter text-white/80 hover:text-accent focus-visible:text-accent focus-visible:outline-none leading-tight py-1 btn-dot"
                       style={{ fontFamily: "'Playfair Display', serif", transition: 'color 0.25s ease' }}
                     >
-                      {item}
+                      <span className="relative z-10 flex items-center transition-transform duration-300 ease-out group-hover:translate-x-2">{item}</span>
+                      <span className="absolute bottom-1 left-0 h-px w-0 group-hover:w-16 bg-accent transition-all duration-400 ease-out" />
                     </a>
                   </motion.div>
                 ))}

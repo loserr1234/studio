@@ -3,15 +3,65 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { animateChars } from '../utils/gsapText';
+import { animateLineReveal } from '../utils/gsapText';
 
 gsap.registerPlugin(ScrollTrigger);
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Points, PointMaterial } from '@react-three/drei';
+import { useMemo } from 'react';
 import { CustomCursor } from '../components/Layout/CustomCursor';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 const GRAIN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E")`;
+
+function FloatingTorusKnot() {
+  const ref = useRef<any>(null);
+  useFrame((state) => {
+    if (!ref.current) return;
+    ref.current.rotation.x = state.clock.elapsedTime * 0.12;
+    ref.current.rotation.y = state.clock.elapsedTime * 0.18;
+    ref.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.3;
+  });
+  return (
+    <mesh ref={ref} position={[2.5, 0, 0]}>
+      <torusKnotGeometry args={[1.1, 0.32, 180, 32, 2, 3]} />
+      <meshStandardMaterial
+        color="#E5C07B"
+        metalness={0.9}
+        roughness={0.1}
+        transparent
+        opacity={0.18}
+      />
+    </mesh>
+  );
+}
+
+function ContactParticles() {
+  const ref = useRef<any>(null);
+  const positions = useMemo(() => {
+    const arr = new Float32Array(2500 * 3);
+    for (let i = 0; i < 2500; i++) {
+      const r = Math.cbrt(Math.random()) * 3;
+      const theta = Math.random() * 2 * Math.PI;
+      const phi = Math.acos(2 * Math.random() - 1);
+      arr[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+      arr[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      arr[i * 3 + 2] = r * Math.cos(phi);
+    }
+    return arr;
+  }, []);
+  useFrame((state) => {
+    if (!ref.current) return;
+    ref.current.rotation.y = state.clock.elapsedTime * 0.04;
+  });
+  return (
+    <Points ref={ref} positions={positions} stride={3} frustumCulled={false}>
+      <PointMaterial transparent color="#ffffff" size={0.009} sizeAttenuation depthWrite={false} opacity={0.25} />
+    </Points>
+  );
+}
 
 function ScrollProgress() {
   const { scrollYProgress } = useScroll();
@@ -52,7 +102,7 @@ export default function ContactPage() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Page title char reveal
-      animateChars(pageTitleRef.current, { scrollTrigger: false, delay: 0.5 });
+      animateLineReveal(pageTitleRef.current, { scrollTrigger: false, delay: 0.5 });
 
       // Form field rows stagger in
       gsap.fromTo(
@@ -145,6 +195,17 @@ export default function ContactPage() {
       <ScrollProgress />
       <CustomCursor />
 
+      {/* 3D ambient background */}
+      <div className="pointer-events-none fixed inset-0 z-0" aria-hidden="true">
+        <Canvas camera={{ position: [0, 0, 4], fov: 55 }}>
+          <ambientLight intensity={0.6} />
+          <pointLight position={[5, 5, 5]} intensity={2} color="#E5C07B" />
+          <pointLight position={[-5, -3, -3]} intensity={0.8} color="#ffffff" />
+          <ContactParticles />
+          <FloatingTorusKnot />
+        </Canvas>
+      </div>
+
       {/* Grain */}
       <div
         className="pointer-events-none fixed inset-0 z-0 opacity-[0.028]"
@@ -159,17 +220,19 @@ export default function ContactPage() {
       <header className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 md:px-12 h-20">
         <Link
           to="/"
-          className="text-2xl font-bold tracking-tighter hover:text-accent transition-colors duration-300"
+          className="group relative text-2xl font-bold tracking-tighter hover:text-accent transition-colors duration-300"
           style={{ fontFamily: "'Playfair Display', serif" }}
         >
           Studio.
+          <span className="absolute -bottom-0.5 left-0 h-px w-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out" />
         </Link>
         <Link
           to="/"
-          className="group flex items-center gap-2 text-[11px] tracking-[0.3em] uppercase text-white/40 hover:text-white transition-colors duration-300"
+          className="group relative flex items-center gap-2 text-[11px] tracking-[0.3em] uppercase text-white/40 hover:text-white transition-colors duration-300 btn-dot"
         >
-          <ArrowLeft className="w-3.5 h-3.5 transition-transform duration-300 group-hover:-translate-x-1" />
-          Back
+          <ArrowLeft className="w-3.5 h-3.5 transition-transform duration-300 group-hover:-translate-x-1 relative z-10" />
+          <span className="relative z-10 flex items-center">Back</span>
+          <span className="absolute -bottom-0.5 left-5 h-px w-0 group-hover:w-[calc(100%-1.25rem)] bg-current/40 transition-all duration-300 ease-out" />
         </Link>
       </header>
 
@@ -324,7 +387,7 @@ export default function ContactPage() {
                 type="submit"
                 onClick={handleWhatsApp}
                 disabled={!isValid}
-                className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-black text-sm font-semibold tracking-wide uppercase overflow-hidden hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(229,192,123,0.3)] active:scale-[0.97] transition-all duration-300 disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-accent text-black text-sm font-semibold tracking-wide uppercase overflow-hidden hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(229,192,123,0.3)] active:scale-[0.97] transition-all duration-300 disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none btn-dot"
               >
                 <span className="absolute inset-0 rounded-full bg-white/20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-in-out" />
                 <span className="relative z-10 flex items-center gap-2">
@@ -344,7 +407,7 @@ export default function ContactPage() {
                 type="submit"
                 onClick={handleEmail}
                 disabled={!isValid}
-                className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white/8 border border-white/15 text-white text-sm font-semibold tracking-wide uppercase overflow-hidden hover:border-accent/40 active:scale-[0.97] transition-all duration-300 disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:border-white/15"
+                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-white/8 border border-white/15 text-white text-sm font-semibold tracking-wide uppercase overflow-hidden hover:border-accent/40 active:scale-[0.97] transition-all duration-300 disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:border-white/15 btn-dot"
               >
                 <span className="absolute inset-0 rounded-full bg-white/5 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-in-out" />
                 <span className="relative z-10 flex items-center gap-2">

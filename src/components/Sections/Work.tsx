@@ -262,11 +262,11 @@ export const Work = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={e => e.stopPropagation()}
-                            className="group/v flex items-center gap-2 text-white/30 hover:text-white/70 text-[8.5px] tracking-[0.3em] uppercase focus-visible:outline-none"
+                            className="group/v flex items-center justify-center gap-2 text-white/30 hover:text-white/70 text-[8.5px] tracking-[0.3em] uppercase focus-visible:outline-none btn-dot"
                             style={{ transition: 'color 0.25s ease' }}
                           >
-                            View Live
-                            <ArrowUpRight size={10} aria-hidden="true" className="group-hover/v:translate-x-0.5 group-hover/v:-translate-y-0.5" style={{ transition: 'transform 0.2s ease' }} />
+                            <span className="relative z-10 flex items-center">View Live</span>
+                            <ArrowUpRight size={10} aria-hidden="true" className="group-hover/v:translate-x-0.5 group-hover/v:-translate-y-0.5 relative z-10" style={{ transition: 'transform 0.2s ease' }} />
                           </a>
                           <span className="text-white/15 text-[8px] tabular-nums">
                             {String(index + 1).padStart(2, '0')} / {String(PANEL_COUNT).padStart(2, '0')}
@@ -350,8 +350,8 @@ export const Work = () => {
                           <div className="w-10 h-10 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center group-hover/cta:bg-accent group-hover/cta:border-accent group-hover/cta:text-black" style={{ transition: 'all 0.3s ease' }}>
                             <ArrowUpRight size={15} aria-hidden="true" />
                           </div>
-                          <span className="text-[8.5px] tracking-[0.4em] uppercase text-white/20 group-hover/cta:text-white/60 font-medium" style={{ transition: 'color 0.3s ease' }}>
-                            View Project
+                          <span className="text-[8.5px] tracking-[0.4em] uppercase text-white/20 group-hover/cta:text-white/60 font-medium btn-dot" style={{ transition: 'color 0.3s ease' }}>
+                            <span className="relative z-10 flex items-center">View Project</span>
                           </span>
                         </button>
                       </div>
@@ -399,10 +399,10 @@ export const Work = () => {
                 </p>
                 <Link
                   to="/projects"
-                  className="group relative inline-flex items-center gap-3 px-10 py-5 rounded-full bg-accent text-black text-sm font-semibold tracking-wide uppercase overflow-hidden hover:scale-[1.03] hover:shadow-[0_0_40px_rgba(229,192,123,0.3)] active:scale-[0.97] transition-all duration-300 mt-2"
+                  className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 rounded-full bg-accent text-black text-sm font-semibold tracking-wide uppercase overflow-hidden hover:scale-[1.03] hover:shadow-[0_0_40px_rgba(229,192,123,0.3)] active:scale-[0.97] transition-all duration-300 mt-2 btn-dot"
                 >
                   <span className="absolute inset-0 rounded-full bg-white/20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-in-out" />
-                  <span className="relative z-10">View All Projects</span>
+                  <span className="relative z-10 flex items-center">View All Projects</span>
                   <span className="relative z-10 w-0 overflow-hidden group-hover:w-5 transition-all duration-300">
                     <ArrowUpRight className="w-4 h-4" strokeWidth={2.5} />
                   </span>

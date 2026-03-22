@@ -75,3 +75,18 @@ html.lenis, html.lenis body {
 .lenis.lenis-smooth iframe {
   pointer-events: none;
 }
+/* btn-dot utility for global hover effect */
+@layer components {
+  .btn-dot {
+    @apply relative inline-flex items-center justify-center transition-all duration-300;
+  }
+  
+  .btn-dot::before {
+    content: '';
+    @apply w-0 h-1.5 rounded-full bg-black opacity-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)];
+  }
+  
+  .btn-dot:hover::before {
+    @apply w-1.5 opacity-100 mr-2.5;
+  }
+}

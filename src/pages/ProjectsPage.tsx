@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -7,6 +7,9 @@ import { animateChars, animateWords } from '../utils/gsapText';
 gsap.registerPlugin(ScrollTrigger);
 import { ArrowUpRight, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Points, PointMaterial } from '@react-three/drei';
+import * as THREE from 'three';
 import { CustomCursor } from '../components/Layout/CustomCursor';
 import { projects } from '../data/projects';
 import { projectContext } from '../data/projectContext';
@@ -24,6 +27,64 @@ const CSS = `
   .pg-ticker { animation: pg-ticker 28s linear infinite; }
   @media (prefers-reduced-motion: reduce) { .pg-ticker { animation: none; } }
 `;
+
+/* ── 3D Wave Mesh for hero backdrop ── */
+function WaveMesh() {
+  const meshRef = useRef<any>(null);
+  const geomRef = useRef<THREE.PlaneGeometry | null>(null);
+
+  useFrame((state) => {
+    if (!meshRef.current || !geomRef.current) return;
+    const positions = geomRef.current.attributes.position;
+    const time = state.clock.elapsedTime;
+    for (let i = 0; i < positions.count; i++) {
+      const x = positions.getX(i);
+      const y = positions.getY(i);
+      const wave = Math.sin(x * 0.8 + time * 0.6) * 0.18
+                 + Math.sin(y * 0.6 + time * 0.4) * 0.12
+                 + Math.sin((x + y) * 0.5 + time * 0.3) * 0.1;
+      positions.setZ(i, wave);
+    }
+    positions.needsUpdate = true;
+  });
+
+  return (
+    <mesh ref={meshRef} rotation={[-Math.PI / 3.5, 0, 0]} position={[0, -1.2, -1]}>
+      <planeGeometry args={[14, 10, 60, 40]} ref={geomRef} />
+      <meshStandardMaterial
+        color="#E5C07B"
+        metalness={0.6}
+        roughness={0.4}
+        transparent
+        opacity={0.06}
+        wireframe
+      />
+    </mesh>
+  );
+}
+
+function ProjectParticles() {
+  const ref = useRef<any>(null);
+  const positions = useMemo(() => {
+    const arr = new Float32Array(3000 * 3);
+    for (let i = 0; i < 3000; i++) {
+      arr[i * 3]     = (Math.random() - 0.5) * 12;
+      arr[i * 3 + 1] = (Math.random() - 0.5) * 8;
+      arr[i * 3 + 2] = (Math.random() - 0.5) * 6;
+    }
+    return arr;
+  }, []);
+  useFrame((state) => {
+    if (!ref.current) return;
+    ref.current.rotation.y = state.clock.elapsedTime * 0.025;
+    ref.current.rotation.x = state.clock.elapsedTime * 0.01;
+  });
+  return (
+    <Points ref={ref} positions={positions} stride={3} frustumCulled={false}>
+      <PointMaterial transparent color="#ffffff" size={0.008} sizeAttenuation depthWrite={false} opacity={0.3} />
+    </Points>
+  );
+}
 
 /* ── Thin gold progress bar at top ── */
 function ScrollProgress() {
@@ -97,6 +158,16 @@ function ProjectsHero() {
       {/* Grain */}
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none opacity-[0.04]"
         style={{ backgroundImage: GRAIN, backgroundSize: '180px 180px' }} />
+
+      {/* 3D wave + particles backdrop */}
+      <div aria-hidden="true" className="absolute inset-0 z-0 pointer-events-none">
+        <Canvas camera={{ position: [0, 0, 4], fov: 60 }}>
+          <ambientLight intensity={0.4} />
+          <pointLight position={[4, 4, 4]} intensity={1.5} color="#E5C07B" />
+          <ProjectParticles />
+          <WaveMesh />
+        </Canvas>
+      </div>
 
       {/* Gold ambient glow */}
       <div aria-hidden="true" className="absolute top-[5%] left-[0%] w-[45vw] h-[50vh] rounded-full pointer-events-none"
@@ -323,11 +394,11 @@ function ProjectSection({ project, index }: { project: typeof projects[0]; index
                     href={project.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-full border border-white/12 bg-white/[0.04] flex items-center justify-center hover:bg-accent hover:border-accent hover:text-black flex-shrink-0"
+                    className="w-9 h-9 rounded-full border border-white/12 bg-white/[0.04] flex items-center justify-center hover:bg-accent hover:border-accent hover:text-black flex-shrink-0 btn-dot"
                     style={{ transition: 'all 0.3s ease' }}
                     aria-label={`Open ${project.title}`}
                   >
-                    <ArrowUpRight size={14} aria-hidden="true" />
+                    <ArrowUpRight size={14} aria-hidden="true" className="relative z-10" />
                   </a>
                 )}
               </div>
@@ -498,12 +569,12 @@ function ProjectsFooter() {
             From idea to launch — design, development, delivery.
           </p>
           <Link
-            to="/#contact"
-            className="group inline-flex items-center gap-2.5 px-10 py-5 rounded-full bg-accent text-black font-semibold tracking-wide uppercase text-sm hover:shadow-[0_0_32px_rgba(229,192,123,0.35)] hover:scale-105 active:scale-[0.97]"
+            to="/contact"
+            className="group inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-full bg-accent text-black font-semibold tracking-wide uppercase text-sm hover:shadow-[0_0_32px_rgba(229,192,123,0.35)] hover:scale-105 active:scale-[0.97] btn-dot"
             style={{ transition: 'all 0.3s ease' }}
           >
-            <span>Start a Project</span>
-            <span className="w-0 overflow-hidden group-hover:w-4" style={{ transition: 'width 0.3s ease' }}>
+            <span className="relative z-10 flex items-center">Start a Project</span>
+            <span className="relative z-10 w-0 overflow-hidden group-hover:w-4" style={{ transition: 'width 0.3s ease' }}>
               <ArrowUpRight size={16} aria-hidden="true" />
             </span>
           </Link>
@@ -552,20 +623,22 @@ export default function ProjectsPage() {
       {/* Fixed logo */}
       <Link
         to="/"
-        className="fixed top-5 left-6 z-[70] text-3xl font-bold tracking-tighter hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+        className="group relative fixed top-5 left-6 z-[70] text-3xl font-bold tracking-tighter hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm btn-dot"
         style={{ transition: 'color 0.3s ease' }}
       >
-        Studio.
+        <span className="relative z-10 flex items-center">Studio.</span>
+        <span className="absolute -bottom-0.5 left-0 h-px w-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out" />
       </Link>
 
       {/* Back */}
       <Link
         to="/"
-        className="fixed top-[1.55rem] right-6 z-[70] flex items-center gap-2 text-white/35 hover:text-white text-[8.5px] tracking-[0.45em] uppercase focus-visible:outline-none"
+        className="group relative fixed top-[1.55rem] right-6 z-[70] flex items-center gap-2 text-white/35 hover:text-white text-[8.5px] tracking-[0.45em] uppercase focus-visible:outline-none btn-dot"
         style={{ transition: 'color 0.3s ease' }}
       >
-        <ArrowLeft size={12} aria-hidden="true" />
-        Home
+        <ArrowLeft size={12} aria-hidden="true" className="relative z-10 transition-transform duration-300 group-hover:-translate-x-1" />
+        <span className="relative z-10 flex items-center">Home</span>
+        <span className="absolute -bottom-0.5 left-4 h-px w-0 group-hover:w-[calc(100%-1rem)] bg-current/40 transition-all duration-300 ease-out" />
       </Link>
 
       <main className="relative z-10">

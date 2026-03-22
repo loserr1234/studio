@@ -18,6 +18,7 @@ import { Footer } from './components/Layout/Footer';
 import ServicesPage from './pages/ServicesPage';
 import ProjectsPage from './pages/ProjectsPage';
 import ContactPage from './pages/ContactPage';
+import { FloatingShape } from './components/Layout/FloatingShape';
 
 function HomePage() {
   return (
@@ -30,11 +31,57 @@ function HomePage() {
       <Navbar />
 
       <main className="relative z-10 w-full flex flex-col items-stretch">
-        <Hero />
-        <Services />
-        <Work />
-        <About />
-        <Contact />
+
+        <div className="relative">
+          <Hero />
+          <FloatingShape type="torus" size={170} color="#E5C07B"
+            rotationSpeed={[0.15, 0.35, 0.08]}
+            style={{ top: '12%', right: '3%', zIndex: 20 }} />
+          <FloatingShape type="tetrahedron" size={90} color="#ffffff"
+            rotationSpeed={[0.5, 0.3, 0.2]}
+            style={{ top: '55%', left: '2%', zIndex: 20 }} />
+        </div>
+
+        <div className="relative">
+          <Services />
+          <FloatingShape type="octahedron" size={120} color="#ffffff"
+            rotationSpeed={[0.4, 0.2, 0.3]}
+            style={{ top: '20%', left: '1%', zIndex: 20 }} />
+          <FloatingShape type="torus2" size={100} color="#E5C07B"
+            rotationSpeed={[0.1, 0.55, 0.2]}
+            style={{ top: '60%', right: '2%', zIndex: 20 }} />
+        </div>
+
+        <div className="relative">
+          <Work />
+          <FloatingShape type="torusKnot" size={150} color="#E5C07B"
+            rotationSpeed={[0.2, 0.5, 0.15]}
+            style={{ top: '15%', right: '2%', zIndex: 20 }} />
+          <FloatingShape type="sphere" size={100} color="#ffffff"
+            rotationSpeed={[0.3, 0.3, 0.3]}
+            style={{ top: '60%', left: '1%', zIndex: 20 }} />
+        </div>
+
+        <div className="relative">
+          <About />
+          <FloatingShape type="icosahedron" size={110} color="#ffffff"
+            rotationSpeed={[0.3, 0.25, 0.4]}
+            style={{ top: '25%', left: '2%', zIndex: 20 }} />
+          <FloatingShape type="cone" size={95} color="#E5C07B"
+            rotationSpeed={[0.25, 0.45, 0.1]}
+            style={{ top: '55%', right: '3%', zIndex: 20 }} />
+        </div>
+
+        <div className="relative">
+          <Contact />
+          <FloatingShape type="dodecahedron" size={130} color="#E5C07B"
+            rotationSpeed={[0.18, 0.38, 0.12]}
+            style={{ top: '20%', right: '4%', zIndex: 20 }} />
+          <FloatingShape type="torusKnot2" size={105} color="#ffffff"
+            rotationSpeed={[0.35, 0.2, 0.5]}
+            style={{ top: '55%', left: '2%', zIndex: 20 }} />
+        </div>
+
       </main>
 
       <Footer />
@@ -81,6 +128,7 @@ function App() {
       gsap.ticker.remove(lenisRaf);
     };
   }, []);
+
 
   return (
     <BrowserRouter>

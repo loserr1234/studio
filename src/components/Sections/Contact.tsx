@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { animateWords } from '../../utils/gsapText';
+import { animateSkewReveal } from '../../utils/gsapText';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,8 +13,8 @@ export const Contact = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Heading word reveal on scroll
-      animateWords(headingRef.current, { start: 'top 80%', stagger: 0.05 });
+      // Heading: skew slide editorial entrance
+      animateSkewReveal(headingRef.current, { start: 'top 80%', stagger: 0.07 });
 
       // Buttons stagger in
       gsap.fromTo('.contact-cta-btn',
@@ -51,11 +51,11 @@ export const Contact = () => {
         <div className="flex-1 flex flex-col items-center justify-center gap-4">
           <a
             href="/contact"
-            className="contact-cta-btn group relative inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-accent text-black text-sm md:text-base font-semibold tracking-wide uppercase overflow-hidden hover:scale-110 hover:shadow-[0_0_40px_rgba(229,192,123,0.4)] active:scale-[0.97] transition-all duration-300 w-fit"
+            className="contact-cta-btn group relative inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-accent text-black text-sm md:text-base font-semibold tracking-wide uppercase overflow-hidden hover:scale-110 hover:shadow-[0_0_40px_rgba(229,192,123,0.4)] active:scale-[0.97] transition-all duration-300 w-fit btn-dot"
             style={{ opacity: 0 }}
           >
             <span className="absolute inset-0 rounded-full bg-white/20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-in-out" />
-            <span className="relative z-10">Start Your Project</span>
+            <span className="relative z-10 flex items-center">Start Your Project</span>
             <span className="relative z-10 w-0 overflow-hidden group-hover:w-4 transition-all duration-300 ease-in-out">
               <ArrowUpRight className="w-4 h-4" strokeWidth={2.5} />
             </span>
