@@ -58,6 +58,7 @@ export const Work = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  const mobileRef = useRef<HTMLElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,6 +66,20 @@ export const Work = () => {
     window.addEventListener('resize', onResize, { passive: true });
     return () => window.removeEventListener('resize', onResize);
   }, []);
+
+  // Animate mobile cards via IntersectionObserver
+  useEffect(() => {
+    if (!isMobile || !mobileRef.current) return;
+    const targets = mobileRef.current.querySelectorAll<HTMLElement>(
+      '.wk-card, .wk-fade, .wk-reveal-title, .wk-line'
+    );
+    const io = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) { (e.target as HTMLElement).classList.add('active'); } }),
+      { threshold: 0.15 }
+    );
+    targets.forEach(el => io.observe(el));
+    return () => io.disconnect();
+  }, [isMobile]);
 
   /* ── scroll-jacking ── */
   const onFrame = useCallback(() => {
@@ -134,8 +149,8 @@ export const Work = () => {
     return (
       <>
         <style>{CSS}</style>
-        <section id="work" className="w-full relative z-10 bg-[#060606] py-20 px-6">
-          <p className="text-[8.5px] tracking-[0.5em] uppercase text-white/20 font-light mb-10">
+        <section id="work" ref={mobileRef} className="w-full relative z-10 bg-[#060606] py-20 px-6">
+          <p className="wk-fade text-[8.5px] tracking-[0.5em] uppercase text-white/20 font-light mb-10">
             Selected Work
           </p>
           <div className="flex flex-col gap-10">
@@ -148,7 +163,7 @@ export const Work = () => {
                   aria-label={`View ${project.title} case study`}
                   onClick={() => handleProjectClick(project.index)}
                   onKeyDown={e => e.key === 'Enter' && handleProjectClick(project.index)}
-                  className="relative overflow-hidden"
+                  className="wk-card relative overflow-hidden"
                   style={{
                     borderRadius: '1rem',
                     aspectRatio: '4/3',
@@ -156,6 +171,7 @@ export const Work = () => {
                     border: '1px solid rgba(255,255,255,0.06)',
                     boxShadow: '0 30px 80px rgba(0,0,0,0.6)',
                     cursor: 'pointer',
+                    transitionDelay: `${index * 0.08}s`,
                   }}
                 >
                   <img
@@ -193,17 +209,25 @@ export const Work = () => {
                 </div>
                 {/* Text */}
                 <div className="flex flex-col gap-3">
-                  <h3
-                    className="font-bold tracking-tighter leading-[0.9]"
-                    style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 8vw, 3rem)' }}
-                  >
-                    {project.displayTitle}
-                  </h3>
+                  <div className="overflow-hidden">
+                    <h3
+                      className="wk-reveal-title font-bold tracking-tighter leading-[0.9]"
+                      style={{
+                        fontFamily: "'Playfair Display', serif",
+                        fontSize: 'clamp(2rem, 8vw, 3rem)',
+                        transitionDelay: `${index * 0.08 + 0.12}s`,
+                      }}
+                    >
+                      {project.displayTitle}
+                    </h3>
+                  </div>
+                  <div className="wk-line h-px bg-white/[0.07]" style={{ transitionDelay: `${index * 0.08 + 0.2}s` }} />
                   <div className="flex flex-wrap gap-2">
-                    {project.tech.map(t => (
+                    {project.tech.map((t, ti) => (
                       <span
                         key={t}
-                        className="px-3 py-1 rounded-full border border-white/[0.08] bg-white/[0.02] text-[8px] text-white/30 font-light tracking-wide"
+                        className="wk-fade px-3 py-1 rounded-full border border-white/[0.08] bg-white/[0.02] text-[8px] text-white/30 font-light tracking-wide"
+                        style={{ transitionDelay: `${index * 0.08 + 0.28 + ti * 0.05}s` }}
                       >
                         {t}
                       </span>
@@ -215,16 +239,19 @@ export const Work = () => {
 
             {/* View all */}
             <div className="flex flex-col items-center gap-6 text-center pt-6">
-              <h3
-                className="font-bold tracking-tighter leading-[0.9]"
-                style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2.2rem, 10vw, 4rem)' }}
-              >
-                See everything<br />
-                <span className="italic text-accent">we've built.</span>
-              </h3>
+              <div className="overflow-hidden">
+                <h3
+                  className="wk-reveal-title font-bold tracking-tighter leading-[0.9]"
+                  style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2.2rem, 10vw, 4rem)' }}
+                >
+                  See everything<br />
+                  <span className="italic text-accent">we've built.</span>
+                </h3>
+              </div>
               <Link
                 to="/projects"
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-black text-sm font-semibold tracking-wide uppercase"
+                className="wk-fade inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-black text-sm font-semibold tracking-wide uppercase"
+                style={{ transitionDelay: '0.2s' }}
               >
                 View All Projects <ArrowUpRight className="w-4 h-4" strokeWidth={2.5} />
               </Link>
