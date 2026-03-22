@@ -8,14 +8,15 @@ import { animateLineReveal, animateBlurIn } from '../../utils/gsapText';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Detect WebGL support
+// Detect WebGL support — properly disposes test context to avoid consuming a context slot
 function isWebGLAvailable(): boolean {
   try {
     const canvas = document.createElement('canvas');
-    return !!(
-      window.WebGLRenderingContext &&
-      (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
-    );
+    const gl = (canvas.getContext('webgl') ?? canvas.getContext('experimental-webgl')) as WebGLRenderingContext | null;
+    if (!gl) return false;
+    const ext = gl.getExtension('WEBGL_lose_context');
+    if (ext) ext.loseContext();
+    return true;
   } catch {
     return false;
   }
@@ -73,7 +74,8 @@ export const Hero = () => {
   const particles2Ref = useRef<HTMLDivElement>(null);
   const screen1Ref    = useRef<HTMLElement>(null);
   const screen2Ref    = useRef<HTMLElement>(null);
-  const [webglSupported, setWebglSupported] = useState(true);
+  // Start as null — don't attempt canvas until we know WebGL works
+  const [webglSupported, setWebglSupported] = useState<boolean | null>(null);
 
   useEffect(() => {
     setWebglSupported(isWebGLAvailable());
@@ -146,12 +148,12 @@ export const Hero = () => {
       {/* ── Screen 1 ── */}
       <section id="hero" ref={screen1Ref} className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-background">
         <div ref={particles1Ref} className="absolute inset-0 z-0 opacity-70">
-          {webglSupported && (
+          {webglSupported === true && (
             <CanvasErrorBoundary>
               <Canvas
                 camera={{ position: [0, 0, 3] }}
                 dpr={[1, 1.5]}
-                gl={{ powerPreference: 'default', antialias: false, failIfMajorPerformanceCaveat: false }}
+                gl={{ alpha: true, powerPreference: 'default', antialias: false, failIfMajorPerformanceCaveat: false }}
               >
                 <ParticleCloud count={3000} />
               </Canvas>
@@ -197,12 +199,12 @@ export const Hero = () => {
       {/* ── Screen 2 ── */}
       <section ref={screen2Ref} className="relative w-full min-h-screen flex items-center overflow-hidden bg-background">
         <div ref={particles2Ref} className="absolute inset-0 z-0 opacity-40">
-          {webglSupported && (
+          {webglSupported === true && (
             <CanvasErrorBoundary>
               <Canvas
                 camera={{ position: [0, 0, 3] }}
                 dpr={[1, 1.5]}
-                gl={{ powerPreference: 'default', antialias: false, failIfMajorPerformanceCaveat: false }}
+                gl={{ alpha: true, powerPreference: 'default', antialias: false, failIfMajorPerformanceCaveat: false }}
               >
                 <ParticleCloud count={3000} />
               </Canvas>
