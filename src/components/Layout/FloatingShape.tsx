@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -53,21 +53,41 @@ export function FloatingShape({
   rotationSpeed = [0.25, 0.4, 0.1],
   style = {},
 }: FloatingShapeProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  // Only mount the Canvas (and create a WebGL context) when in/near viewport.
+  // This prevents exhausting the browser's WebGL context limit on mobile
+  // (typically 8–16 total), which causes shapes to show as broken placeholders.
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { rootMargin: '200px 0px' },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div
+      ref={containerRef}
       className="pointer-events-none absolute"
       style={{ width: size, height: size, ...style }}
       aria-hidden="true"
     >
-      <Canvas
-        frameloop="always"
-        camera={{ position: [0, 0, 3.5], fov: 50 }}
-        gl={{ antialias: true, alpha: true }}
-        onCreated={({ gl }) => { gl.setClearColor(0x000000, 0); }}
-        style={{ width: '100%', height: '100%' }}
-      >
-        <ShapeMesh type={type} color={color} rotationSpeed={rotationSpeed} />
-      </Canvas>
+      {inView && (
+        <Canvas
+          frameloop="always"
+          camera={{ position: [0, 0, 3.5], fov: 50 }}
+          gl={{ antialias: false, alpha: true, powerPreference: 'default', failIfMajorPerformanceCaveat: false }}
+          onCreated={({ gl }) => { gl.setClearColor(0x000000, 0); }}
+          style={{ width: '100%', height: '100%' }}
+        >
+          <ShapeMesh type={type} color={color} rotationSpeed={rotationSpeed} />
+        </Canvas>
+      )}
     </div>
   );
 }
