@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { animateChars, animateWords, animateBlurIn } from '../../utils/gsapText';
+import { animateChars, animateWords, animateSkewReveal } from '../../utils/gsapText';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,7 +25,7 @@ export const Services = () => {
     const ctx = gsap.context(() => {
       // Header animations
       animateChars(kickerRef.current, { start: 'top 85%', once: true });
-      animateBlurIn(sectionHRef.current, { start: 'top 80%', once: true });
+      animateSkewReveal(sectionHRef.current, { start: 'top 80%', once: true });
 
       // Each service: number pop + title word reveal + desc fade
       titleRefs.current.forEach((el) => {
