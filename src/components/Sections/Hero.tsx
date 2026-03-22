@@ -1,4 +1,4 @@
-import { useRef, useMemo, useEffect } from 'react';
+import { useRef, useMemo, useEffect, useState, Component, ReactNode } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial } from '@react-three/drei';
 import { motion } from 'framer-motion';
@@ -7,6 +7,32 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { animateLineReveal, animateBlurIn } from '../../utils/gsapText';
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Detect WebGL support
+function isWebGLAvailable(): boolean {
+  try {
+    const canvas = document.createElement('canvas');
+    return !!(
+      window.WebGLRenderingContext &&
+      (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+    );
+  } catch {
+    return false;
+  }
+}
+
+// Error boundary to catch WebGL failures silently
+class CanvasErrorBoundary extends Component<{ children: ReactNode; fallback?: ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: ReactNode; fallback?: ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() { return { hasError: true }; }
+  render() {
+    if (this.state.hasError) return this.props.fallback ?? null;
+    return this.props.children;
+  }
+}
 
 function ParticleCloud({ count = 6000 }) {
   const points = useRef<any>(null);
@@ -47,6 +73,11 @@ export const Hero = () => {
   const particles2Ref = useRef<HTMLDivElement>(null);
   const screen1Ref    = useRef<HTMLElement>(null);
   const screen2Ref    = useRef<HTMLElement>(null);
+  const [webglSupported, setWebglSupported] = useState(true);
+
+  useEffect(() => {
+    setWebglSupported(isWebGLAvailable());
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -115,7 +146,17 @@ export const Hero = () => {
       {/* ── Screen 1 ── */}
       <section id="hero" ref={screen1Ref} className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-background">
         <div ref={particles1Ref} className="absolute inset-0 z-0 opacity-70">
-          <Canvas camera={{ position: [0, 0, 3] }}><ParticleCloud /></Canvas>
+          {webglSupported && (
+            <CanvasErrorBoundary>
+              <Canvas
+                camera={{ position: [0, 0, 3] }}
+                dpr={[1, 1.5]}
+                gl={{ powerPreference: 'default', antialias: false, failIfMajorPerformanceCaveat: false }}
+              >
+                <ParticleCloud count={3000} />
+              </Canvas>
+            </CanvasErrorBoundary>
+          )}
         </div>
 
         {/* GSAP char-animated logo */}
@@ -156,7 +197,17 @@ export const Hero = () => {
       {/* ── Screen 2 ── */}
       <section ref={screen2Ref} className="relative w-full min-h-screen flex items-center overflow-hidden bg-background">
         <div ref={particles2Ref} className="absolute inset-0 z-0 opacity-40">
-          <Canvas camera={{ position: [0, 0, 3] }}><ParticleCloud /></Canvas>
+          {webglSupported && (
+            <CanvasErrorBoundary>
+              <Canvas
+                camera={{ position: [0, 0, 3] }}
+                dpr={[1, 1.5]}
+                gl={{ powerPreference: 'default', antialias: false, failIfMajorPerformanceCaveat: false }}
+              >
+                <ParticleCloud count={3000} />
+              </Canvas>
+            </CanvasErrorBoundary>
+          )}
         </div>
 
         <div className="relative z-10 flex flex-col items-start text-left px-6 md:px-12 lg:px-20 w-full">
